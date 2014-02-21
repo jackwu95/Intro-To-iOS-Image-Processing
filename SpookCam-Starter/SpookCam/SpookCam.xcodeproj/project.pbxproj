@@ -22,6 +22,7 @@
 		84FC4D3418B7F33B00B764C0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FC4D1318B7F33B00B764C0 /* UIKit.framework */; };
 		84FC4D3C18B7F33B00B764C0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 84FC4D3A18B7F33B00B764C0 /* InfoPlist.strings */; };
 		84FC4D3E18B7F33B00B764C0 /* SpookCamTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FC4D3D18B7F33B00B764C0 /* SpookCamTests.m */; };
+		84FC4D5518B8012700B764C0 /* ImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FC4D5418B8012700B764C0 /* ImageProcessor.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,8 @@
 		84FC4D3918B7F33B00B764C0 /* SpookCamTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SpookCamTests-Info.plist"; sourceTree = "<group>"; };
 		84FC4D3B18B7F33B00B764C0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		84FC4D3D18B7F33B00B764C0 /* SpookCamTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpookCamTests.m; sourceTree = "<group>"; };
+		84FC4D5318B8012700B764C0 /* ImageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageProcessor.h; sourceTree = "<group>"; };
+		84FC4D5418B8012700B764C0 /* ImageProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageProcessor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +123,8 @@
 				84FC4D2418B7F33B00B764C0 /* Main_iPad.storyboard */,
 				84FC4D2718B7F33B00B764C0 /* ViewController.h */,
 				84FC4D2818B7F33B00B764C0 /* ViewController.m */,
+				84FC4D5318B8012700B764C0 /* ImageProcessor.h */,
+				84FC4D5418B8012700B764C0 /* ImageProcessor.m */,
 				84FC4D2A18B7F33B00B764C0 /* Images.xcassets */,
 				84FC4D1618B7F33B00B764C0 /* Supporting Files */,
 			);
@@ -254,6 +259,7 @@
 			files = (
 				84FC4D2918B7F33B00B764C0 /* ViewController.m in Sources */,
 				84FC4D2018B7F33B00B764C0 /* AppDelegate.m in Sources */,
+				84FC4D5518B8012700B764C0 /* ImageProcessor.m in Sources */,
 				84FC4D1C18B7F33B00B764C0 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -473,6 +479,7 @@
 				84FC4D4318B7F33B00B764C0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		84FC4D4418B7F33B00B764C0 /* Build configuration list for PBXNativeTarget "SpookCamTests" */ = {
 			isa = XCConfigurationList;
@@ -481,6 +488,7 @@
 				84FC4D4618B7F33B00B764C0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

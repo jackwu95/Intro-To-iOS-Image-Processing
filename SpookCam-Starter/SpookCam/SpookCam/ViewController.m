@@ -10,6 +10,8 @@
 
 @interface ViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
+@property (weak, nonatomic) IBOutlet UIImageView *mainImageView;
+
 @property (strong, nonatomic) UIImagePickerController * imagePickerController;
 @property (strong, nonatomic) UIPopoverController * imagePickerPopoverController; //For presenting imagePicker on iPad
 
@@ -65,6 +67,47 @@
 
 #pragma mark - Private
 
+- (void)logPixelsOfImage:(UIImage*)image {
+    // 1. Get pixels of image
+    UInt32 * pixels;
+    
+    CGImageRef inputCGImage = [image CGImage];
+    NSUInteger width = CGImageGetWidth(inputCGImage);
+    NSUInteger height = CGImageGetHeight(inputCGImage);
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    
+    NSUInteger bytesPerPixel = 4;
+    NSUInteger bytesPerRow = bytesPerPixel * width;
+    NSUInteger bitsPerComponent = 8;
+    
+    pixels = (UInt32 *) calloc(height * width, sizeof(UInt32));
+    
+    CGContextRef context = CGBitmapContextCreate(pixels, width, height,
+                                                 bitsPerComponent, bytesPerRow, colorSpace,
+                                                 kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+    
+    CGContextDrawImage(context, CGRectMake(0, 0, width, height), inputCGImage);
+    
+    CGColorSpaceRelease(colorSpace);
+    CGContextRelease(context);
+    
+#define R(x) ( ((x) & 0xFF) )
+#define G(x) ( R((x) >> 8)  )
+#define B(x) ( R((x) >> 16) )
+    
+    // 2. Iterate and log!
+    NSLog(@"Pixels of image:");
+    UInt32 * currentPixel = pixels;
+    for (NSUInteger j = 0; j < height; j++) {
+        for (NSUInteger i = 0; i < width; i++) {
+            UInt32 color = *currentPixel;
+            printf("%3d,%3d,%3d ",R(color),G(color),B(color));
+        }
+        printf("\n");
+    }
+}
+
 #pragma mark - Protocol Conformance
 
 #pragma mark - UIImagePickerDelegate
@@ -92,6 +135,8 @@
     // 2. Grab the image
     self.workingImage = [info objectForKey:UIImagePickerControllerOriginalImage];
 
+    // 3. Print out the raw pixels!
+    [self logPixelsOfImage:self.workingImage];
 }
 
 @end
