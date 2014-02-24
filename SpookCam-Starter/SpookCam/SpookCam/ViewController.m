@@ -30,12 +30,6 @@
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - Custom Accessors
 
 - (UIImagePickerController *)imagePickerController {
@@ -87,6 +81,15 @@
 
 #pragma mark - Private
 
+- (void)setupWithImage:(UIImage*)image {
+    self.workingImage = image;
+    self.mainImageView.image = image;
+    
+    
+    // Commence with processing!
+//    [self logPixelsOfImage:image];
+}
+
 - (void)logPixelsOfImage:(UIImage*)image {
     // 1. Get pixels of image
     UInt32 * pixels;
@@ -129,6 +132,11 @@
     }
     
     free(pixels);
+    
+#undef R
+#undef G
+#undef B
+    
 }
 
 #pragma mark - Protocol Conformance
@@ -136,6 +144,7 @@
 #pragma mark - UIImagePickerDelegate
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    // Dismiss the imagepicker
     if (self.imagePickerPopoverController) {
         [self.imagePickerPopoverController dismissPopoverAnimated:YES];
         self.imagePickerPopoverController = nil;
@@ -146,8 +155,7 @@
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    
-    // 1. Dismiss the image picker
+    // Dismiss the imagepicker
     if (self.imagePickerPopoverController) {
         [self.imagePickerPopoverController dismissPopoverAnimated:YES];
         self.imagePickerPopoverController = nil;
@@ -156,12 +164,7 @@
         [[picker presentingViewController] dismissViewControllerAnimated:YES completion:nil];
     }
     
-    // 2. Grab & show the image
-    self.workingImage = [info objectForKey:UIImagePickerControllerOriginalImage];
-    self.mainImageView.image = self.workingImage;
-
-    // 3. Print out the raw pixels!
-    [self logPixelsOfImage:self.workingImage];
+    [self setupWithImage:[info objectForKey:UIImagePickerControllerOriginalImage]];
 }
 
 #pragma mark - UIPopoverControllerDelegate
