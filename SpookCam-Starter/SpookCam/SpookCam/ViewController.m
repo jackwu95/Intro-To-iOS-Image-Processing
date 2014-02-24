@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 
-@interface ViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface ViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *mainImageView;
 
@@ -50,6 +50,10 @@
 #pragma mark - IBActions
 
 - (IBAction)takePhotoFromCamera:(UIBarButtonItem *)sender {
+    if (self.imagePickerPopoverController) {
+        //popover is still showing
+        return;
+    }
     self.imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
     [self presentViewController:self.imagePickerController animated:YES completion:nil];
 }
@@ -58,8 +62,13 @@
     self.imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
 
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        if (self.imagePickerPopoverController) {
+            //popover is still showing
+            return;
+        }
         self.imagePickerPopoverController = [[UIPopoverController alloc]
                                              initWithContentViewController:self.imagePickerController];
+        self.imagePickerPopoverController.delegate = self;
         [self.imagePickerPopoverController presentPopoverFromBarButtonItem:sender
                                                   permittedArrowDirections:UIPopoverArrowDirectionAny
                                                                   animated:YES];
@@ -144,11 +153,18 @@
         [[picker presentingViewController] dismissViewControllerAnimated:YES completion:nil];
     }
     
-    // 2. Grab the image
+    // 2. Grab & show the image
     self.workingImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    self.mainImageView.image = self.workingImage;
 
     // 3. Print out the raw pixels!
     [self logPixelsOfImage:self.workingImage];
+}
+
+#pragma mark - UIPopoverControllerDelegate
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+    self.imagePickerPopoverController = nil;
 }
 
 @end
