@@ -87,7 +87,7 @@
     
     
     // Commence with processing!
-//    [self logPixelsOfImage:image];
+    [self logPixelsOfImage:image];
 }
 
 - (void)logPixelsOfImage:(UIImage*)image {
