@@ -12,8 +12,9 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *mainImageView;
 
+//For presenting imagePicker on iPad
+@property (strong, nonatomic) UIPopoverController * imagePickerPopoverController;
 @property (strong, nonatomic) UIImagePickerController * imagePickerController;
-@property (strong, nonatomic) UIPopoverController * imagePickerPopoverController; //For presenting imagePicker on iPad
 
 @property (strong, nonatomic) UIImage * workingImage;
 
@@ -48,21 +49,28 @@
 
 #pragma mark - IBActions
 
-- (IBAction)takePhotoFromCamera:(UIButton *)sender {
+- (IBAction)takePhotoFromCamera:(UIBarButtonItem *)sender {
     self.imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
     [self presentViewController:self.imagePickerController animated:YES completion:nil];
 }
 
-- (IBAction)takePhotoFromAlbum:(UIButton *)sender {
+- (IBAction)takePhotoFromAlbum:(UIBarButtonItem *)sender {
     self.imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
 
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        self.imagePickerPopoverController = [[UIPopoverController alloc] initWithContentViewController:self.imagePickerController];
-        [self.imagePickerPopoverController presentPopoverFromRect:sender.bounds inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+        self.imagePickerPopoverController = [[UIPopoverController alloc]
+                                             initWithContentViewController:self.imagePickerController];
+        [self.imagePickerPopoverController presentPopoverFromBarButtonItem:sender
+                                                  permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                                  animated:YES];
     }
     else {
         [self presentViewController:self.imagePickerController animated:YES completion:nil];
     }
+}
+
+- (IBAction)sharePhoto:(UIBarButtonItem *)sender {
+    
 }
 
 #pragma mark - Private
@@ -84,8 +92,8 @@
     pixels = (UInt32 *) calloc(height * width, sizeof(UInt32));
     
     CGContextRef context = CGBitmapContextCreate(pixels, width, height,
-                                                 bitsPerComponent, bytesPerRow, colorSpace,
-                                                 kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+                             bitsPerComponent, bytesPerRow, colorSpace,
+                kCGImageAlphaPremultipliedLast|kCGBitmapByteOrder32Big);
     
     CGContextDrawImage(context, CGRectMake(0, 0, width, height), inputCGImage);
     
@@ -103,9 +111,12 @@
         for (NSUInteger i = 0; i < width; i++) {
             UInt32 color = *currentPixel;
             printf("%3d,%3d,%3d ",R(color),G(color),B(color));
+            currentPixel++;
         }
         printf("\n");
     }
+    
+    free(pixels);
 }
 
 #pragma mark - Protocol Conformance
@@ -119,7 +130,8 @@
     }
     else {
         [[picker presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-    }}
+    }
+}
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
