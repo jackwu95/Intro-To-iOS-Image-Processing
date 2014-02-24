@@ -78,8 +78,11 @@
     }
 }
 
-- (IBAction)sharePhoto:(UIBarButtonItem *)sender {
-    
+- (IBAction)savePhoto:(UIBarButtonItem *)sender {
+    if (!self.workingImage) {
+        return;
+    }
+    UIImageWriteToSavedPhotosAlbum(self.workingImage, nil, nil, nil);
 }
 
 #pragma mark - Private

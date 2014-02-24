@@ -37,7 +37,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="sD2-fC-yw5"/>
                                     <barButtonItem title="Share" id="nEQ-Ee-PYL">
                                         <connections>
-                                            <action selector="sharePhoto:" destination="BYZ-38-t0r" id="C7R-Vu-i7D"/>
+                                            <action selector="savePhoto:" destination="BYZ-38-t0r" id="ZeT-zM-kz2"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
