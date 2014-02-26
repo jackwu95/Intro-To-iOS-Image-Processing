@@ -35,7 +35,7 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="sD2-fC-yw5"/>
-                                    <barButtonItem title="Share" id="nEQ-Ee-PYL">
+                                    <barButtonItem title="Save" id="nEQ-Ee-PYL">
                                         <connections>
                                             <action selector="savePhoto:" destination="BYZ-38-t0r" id="ZeT-zM-kz2"/>
                                         </connections>

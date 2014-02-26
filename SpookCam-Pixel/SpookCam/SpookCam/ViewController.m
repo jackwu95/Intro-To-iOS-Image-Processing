@@ -7,8 +7,9 @@
 //
 
 #import "ViewController.h"
+#import "ImageProcessor.h"
 
-@interface ViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverControllerDelegate>
+@interface ViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverControllerDelegate, ImageProcessorDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *mainImageView;
 
@@ -28,12 +29,6 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Custom Accessors
@@ -87,55 +82,27 @@
 
 #pragma mark - Private
 
-- (void)logPixelsOfImage:(UIImage*)image {
-    // 1. Get pixels of image
-    UInt32 * pixels;
-    
-    CGImageRef inputCGImage = [image CGImage];
-    NSUInteger width = CGImageGetWidth(inputCGImage);
-    NSUInteger height = CGImageGetHeight(inputCGImage);
-    
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    
-    NSUInteger bytesPerPixel = 4;
-    NSUInteger bytesPerRow = bytesPerPixel * width;
-    NSUInteger bitsPerComponent = 8;
-    
-    pixels = (UInt32 *) calloc(height * width, sizeof(UInt32));
-    
-    CGContextRef context = CGBitmapContextCreate(pixels, width, height,
-                             bitsPerComponent, bytesPerRow, colorSpace,
-                kCGImageAlphaPremultipliedLast|kCGBitmapByteOrder32Big);
-    
-    CGContextDrawImage(context, CGRectMake(0, 0, width, height), inputCGImage);
-    
-    CGColorSpaceRelease(colorSpace);
-    CGContextRelease(context);
-    
-#define R(x) ( ((x) & 0xFF) )
-#define G(x) ( R((x) >> 8)  )
-#define B(x) ( R((x) >> 16) )
-    
-    // 2. Iterate and log!
-    NSLog(@"Pixels of image:");
-    UInt32 * currentPixel = pixels;
-    for (NSUInteger j = 0; j < height; j++) {
-        for (NSUInteger i = 0; i < width; i++) {
-            UInt32 color = *currentPixel;
-            printf("%3d,%3d,%3d ",R(color),G(color),B(color));
-            currentPixel++;
-        }
-        printf("\n");
-    }
-    
-    free(pixels);
+- (void)setupWithImage:(UIImage*)image {
+    self.workingImage = image;
+
+    // Commence with processing!
+    [ImageProcessor sharedProcessor].delegate = self;
+    [[ImageProcessor sharedProcessor] processImage:image];
 }
 
 #pragma mark - Protocol Conformance
 
+#pragma mark - ImageProcessorDelegate
+
+- (void)imageProcessorFinishedProcessingWithImage:(UIImage *)outputImage {
+    self.mainImageView.image = outputImage;
+    self.mainImageView.backgroundColor = [UIColor redColor];
+}
+
 #pragma mark - UIImagePickerDelegate
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    // Dismiss the imagepicker
     if (self.imagePickerPopoverController) {
         [self.imagePickerPopoverController dismissPopoverAnimated:YES];
         self.imagePickerPopoverController = nil;
@@ -146,8 +113,7 @@
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    
-    // 1. Dismiss the image picker
+    // Dismiss the imagepicker
     if (self.imagePickerPopoverController) {
         [self.imagePickerPopoverController dismissPopoverAnimated:YES];
         self.imagePickerPopoverController = nil;
@@ -156,12 +122,7 @@
         [[picker presentingViewController] dismissViewControllerAnimated:YES completion:nil];
     }
     
-    // 2. Grab & show the image
-    self.workingImage = [info objectForKey:UIImagePickerControllerOriginalImage];
-    self.mainImageView.image = self.workingImage;
-
-    // 3. Print out the raw pixels!
-    [self logPixelsOfImage:self.workingImage];
+    [self setupWithImage:[info objectForKey:UIImagePickerControllerOriginalImage]];
 }
 
 #pragma mark - UIPopoverControllerDelegate

@@ -5,7 +5,7 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>44D8F0B3-BF44-4E1D-9B69-8528F50C10A3</string>
+	<string>F298FE40-0BF4-4645-9784-899B06AB1BC3</string>
 	<key>IDESourceControlProjectName</key>
 	<string>SpookCam</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
@@ -14,7 +14,7 @@
 		<string>https://github.com/jackwu95/Intro-To-iOS-Image-Processing.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>SpookCam-Pixel/SpookCam/SpookCam.xcodeproj/project.xcworkspace</string>
+	<string>SpookCam-Starter/SpookCam/SpookCam.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>B4539AC7-21B7-46C1-B912-E7BE7C365C16</key>
