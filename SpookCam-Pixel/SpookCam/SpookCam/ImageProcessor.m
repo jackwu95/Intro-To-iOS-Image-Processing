@@ -30,7 +30,8 @@
 - (void)processImage:(UIImage*)inputImage {
   UIImage * outputImage = [self processUsingPixels:inputImage];
   
-  if ([self.delegate respondsToSelector:@selector(imageProcessorFinishedProcessingWithImage:)]) {
+  if ([self.delegate respondsToSelector:
+       @selector(imageProcessorFinishedProcessingWithImage:)]) {
     [self.delegate imageProcessorFinishedProcessingWithImage:outputImage];
   }
 }
