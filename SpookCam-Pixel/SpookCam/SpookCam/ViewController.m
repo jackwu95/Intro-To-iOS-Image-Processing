@@ -73,6 +73,7 @@
 #pragma mark - ImageProcessorDelegate
 
 - (void)imageProcessorFinishedProcessingWithImage:(UIImage *)outputImage {
+  self.workingImage = outputImage;
   self.mainImageView.image = outputImage;
 }
 
