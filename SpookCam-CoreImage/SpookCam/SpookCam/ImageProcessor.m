@@ -7,6 +7,7 @@
 //
 
 #import "ImageProcessor.h"
+#import "UIImage+OrientationFix.h"
 
 @interface ImageProcessor ()
 
@@ -39,6 +40,9 @@
 #pragma mark - Private
 
 - (UIImage *)processUsingCoreImage:(UIImage*)input {
+  // Fix orientation of input
+  input = [input imageWithFixedOrientation];
+
   CIImage * inputCIImage = [[CIImage alloc] initWithImage:input];
   
   // 1. Create a grayscale filter
@@ -60,7 +64,7 @@
   // 3. Apply our filters
   [alphaFilter setValue:ghostCIImage forKeyPath:@"inputImage"];
   ghostCIImage = [alphaFilter outputImage];
-  
+
   [blendFilter setValue:ghostCIImage forKeyPath:@"inputImage"];
   [blendFilter setValue:inputCIImage forKeyPath:@"inputBackgroundImage"];
   CIImage * blendOutput = [blendFilter outputImage];
@@ -68,7 +72,7 @@
   [grayFilter setValue:blendOutput forKeyPath:@"inputImage"];
   CIImage * outputCIImage = [grayFilter outputImage];
   
-  UIImage * outputImage = [UIImage imageWithCIImage:outputCIImage];
+  UIImage * outputImage = [UIImage imageWithCIImage:outputCIImage scale:input.scale orientation:input.imageOrientation];
   
   return outputImage;
 }

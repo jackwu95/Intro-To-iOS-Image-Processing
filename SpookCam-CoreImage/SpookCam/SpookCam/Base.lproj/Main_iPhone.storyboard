@@ -23,6 +23,10 @@
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t0H-HD-DEP">
                                 <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="320" id="JjY-E2-K9h"/>
+                                    <constraint firstAttribute="height" constant="44" id="kcJ-uU-CDK"/>
+                                </constraints>
                                 <items>
                                     <barButtonItem title="Camera" id="Pnw-yS-zLD">
                                         <connections>
@@ -45,13 +49,12 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="t0H-HD-DEP" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="55C-fi-M26"/>
-                            <constraint firstItem="uVb-gU-WCD" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="dcQ-5L-EqI"/>
-                            <constraint firstItem="AQt-AX-NqE" firstAttribute="top" secondItem="t0H-HD-DEP" secondAttribute="bottom" id="g77-rV-PbI"/>
-                            <constraint firstItem="t0H-HD-DEP" firstAttribute="top" secondItem="uVb-gU-WCD" secondAttribute="bottom" id="oz6-dm-C1l"/>
-                            <constraint firstAttribute="trailing" secondItem="uVb-gU-WCD" secondAttribute="trailing" id="raD-uW-Cgr"/>
-                            <constraint firstAttribute="trailing" secondItem="t0H-HD-DEP" secondAttribute="trailing" id="uLw-Oc-gy6"/>
-                            <constraint firstItem="uVb-gU-WCD" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="vhx-NP-avO"/>
+                            <constraint firstItem="AQt-AX-NqE" firstAttribute="top" secondItem="t0H-HD-DEP" secondAttribute="bottom" id="87T-Z2-6uH"/>
+                            <constraint firstItem="t0H-HD-DEP" firstAttribute="top" secondItem="uVb-gU-WCD" secondAttribute="bottom" id="Xea-KJ-hSz"/>
+                            <constraint firstItem="uVb-gU-WCD" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="ZN2-Yo-LSr"/>
+                            <constraint firstAttribute="trailing" secondItem="uVb-gU-WCD" secondAttribute="trailing" id="Zm0-1C-S4p"/>
+                            <constraint firstItem="uVb-gU-WCD" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="cBy-k5-ppV"/>
+                            <constraint firstItem="t0H-HD-DEP" firstAttribute="leading" secondItem="uVb-gU-WCD" secondAttribute="leading" id="qLG-an-dAk"/>
                         </constraints>
                     </view>
                     <connections>

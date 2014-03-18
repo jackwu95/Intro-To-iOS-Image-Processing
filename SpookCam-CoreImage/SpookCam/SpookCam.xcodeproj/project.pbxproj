@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		047425DB18D7F5CC0062C4C0 /* ghost.png in Resources */ = {isa = PBXBuildFile; fileRef = 047425DA18D7F5CC0062C4C0 /* ghost.png */; };
+		047425DE18D7FF170062C4C0 /* UIImage+OrientationFix.m in Sources */ = {isa = PBXBuildFile; fileRef = 047425DD18D7FF170062C4C0 /* UIImage+OrientationFix.m */; };
 		8411A5CF18BEA02B00DCAC5C /* ImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411A5CE18BEA02B00DCAC5C /* ImageProcessor.m */; };
 		84FC4D1018B7F33B00B764C0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FC4D0F18B7F33B00B764C0 /* Foundation.framework */; };
 		84FC4D1218B7F33B00B764C0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FC4D1118B7F33B00B764C0 /* CoreGraphics.framework */; };
@@ -37,6 +38,8 @@
 
 /* Begin PBXFileReference section */
 		047425DA18D7F5CC0062C4C0 /* ghost.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ghost.png; sourceTree = "<group>"; };
+		047425DC18D7FF170062C4C0 /* UIImage+OrientationFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+OrientationFix.h"; sourceTree = "<group>"; };
+		047425DD18D7FF170062C4C0 /* UIImage+OrientationFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+OrientationFix.m"; sourceTree = "<group>"; };
 		8411A5CD18BEA02B00DCAC5C /* ImageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageProcessor.h; sourceTree = "<group>"; };
 		8411A5CE18BEA02B00DCAC5C /* ImageProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageProcessor.m; sourceTree = "<group>"; };
 		84FC4D0C18B7F33B00B764C0 /* SpookCam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpookCam.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,6 +127,8 @@
 				84FC4D2818B7F33B00B764C0 /* ViewController.m */,
 				8411A5CD18BEA02B00DCAC5C /* ImageProcessor.h */,
 				8411A5CE18BEA02B00DCAC5C /* ImageProcessor.m */,
+				047425DC18D7FF170062C4C0 /* UIImage+OrientationFix.h */,
+				047425DD18D7FF170062C4C0 /* UIImage+OrientationFix.m */,
 				047425DA18D7F5CC0062C4C0 /* ghost.png */,
 				84FC4D2A18B7F33B00B764C0 /* Images.xcassets */,
 				84FC4D1618B7F33B00B764C0 /* Supporting Files */,
@@ -206,6 +211,9 @@
 			attributes = {
 				LastUpgradeCheck = 0510;
 				TargetAttributes = {
+					84FC4D0B18B7F33B00B764C0 = {
+						DevelopmentTeam = 7FUM87XXLZ;
+					};
 					84FC4D2F18B7F33B00B764C0 = {
 						TestTargetID = 84FC4D0B18B7F33B00B764C0;
 					};
@@ -259,6 +267,7 @@
 			files = (
 				84FC4D2918B7F33B00B764C0 /* ViewController.m in Sources */,
 				84FC4D2018B7F33B00B764C0 /* AppDelegate.m in Sources */,
+				047425DE18D7FF170062C4C0 /* UIImage+OrientationFix.m in Sources */,
 				8411A5CF18BEA02B00DCAC5C /* ImageProcessor.m in Sources */,
 				84FC4D1C18B7F33B00B764C0 /* main.m in Sources */,
 			);
@@ -387,10 +396,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jack Wu (QD3C3FLJHQ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SpookCam/SpookCam-Prefix.pch";
 				INFOPLIST_FILE = "SpookCam/SpookCam-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "4A9B4A4C-C9AD-4C0D-81DC-A8704B3A93B1";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -401,10 +413,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jack Wu (QD3C3FLJHQ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SpookCam/SpookCam-Prefix.pch";
 				INFOPLIST_FILE = "SpookCam/SpookCam-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "4A9B4A4C-C9AD-4C0D-81DC-A8704B3A93B1";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
