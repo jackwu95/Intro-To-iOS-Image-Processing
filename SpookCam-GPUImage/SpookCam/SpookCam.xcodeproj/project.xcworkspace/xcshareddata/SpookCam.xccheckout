@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>DDAC74D3-DC8D-4568-A7B3-84B5592D3D75</string>
+	<key>IDESourceControlProjectName</key>
+	<string>SpookCam</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>402D4094-581A-4D4A-8351-32338C7CDC80</key>
+		<string>https://github.com/jackwu95/Intro-To-iOS-Image-Processing.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>SpookCam-GPUImage/SpookCam/SpookCam.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>402D4094-581A-4D4A-8351-32338C7CDC80</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/jackwu95/Intro-To-iOS-Image-Processing.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>402D4094-581A-4D4A-8351-32338C7CDC80</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>402D4094-581A-4D4A-8351-32338C7CDC80</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Intro-To-iOS-Image-Processing</string>
+		</dict>
+	</array>
+</dict>
+</plist>
