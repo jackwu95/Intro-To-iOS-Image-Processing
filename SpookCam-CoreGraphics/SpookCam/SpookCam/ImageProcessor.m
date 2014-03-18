@@ -30,8 +30,7 @@
 - (void)processImage:(UIImage*)inputImage {
   UIImage * outputImage = [self processUsingCoreGraphics:inputImage];
   
-  if ([self.delegate respondsToSelector:
-       @selector(imageProcessorFinishedProcessingWithImage:)]) {
+  if ([self.delegate respondsToSelector:@selector(imageProcessorFinishedProcessingWithImage:)]) {
     [self.delegate imageProcessorFinishedProcessingWithImage:outputImage];
   }
 }
@@ -41,33 +40,53 @@
 - (UIImage *)processUsingCoreGraphics:(UIImage*)input {
   
   CGRect imageRect = {CGPointZero,input.size};
-  NSInteger width = CGRectGetWidth(imageRect);
-  NSInteger height = CGRectGetHeight(imageRect);
+  NSInteger inputWidth = CGRectGetWidth(imageRect);
+  NSInteger inputHeight = CGRectGetHeight(imageRect);
   
-  // Grayscale color space
-  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+  // 1. Blend the ghost onto our image first
+  UIImage * ghostImage = [UIImage imageNamed:@"ghost.png"];
+  CGFloat ghostImageAspectRatio = ghostImage.size.width / ghostImage.size.height;
   
-  // Create bitmap content with current image size and grayscale colorspace
-  CGContextRef context = CGBitmapContextCreate(nil, width, height,
-                           8, 0, colorSpace, (CGBitmapInfo)kCGImageAlphaNone);
+  NSInteger targetGhostWidth = inputWidth * 0.25;
+  CGSize ghostSize = CGSizeMake(targetGhostWidth, targetGhostWidth / ghostImageAspectRatio);
+  CGPoint ghostOrigin = CGPointMake(inputWidth * 0.5, inputHeight * 0.2);
   
-  // Draw image into current context, with specified rectangle
-  // using previously defined context (with grayscale colorspace)
+  CGRect ghostRect = {ghostOrigin, ghostSize};
+  
+  // 1.1 Draw our image into a new CGContext
+  UIGraphicsBeginImageContext(input.size);
+  CGContextRef context = UIGraphicsGetCurrentContext();
   CGContextDrawImage(context, imageRect, [input CGImage]);
   
-  // Create bitmap image info from pixel data in current context
+  // 1.2 Set Alpha to 0.5 and draw our ghost on
+  CGContextSetBlendMode(context, kCGBlendModeColor);
+  CGContextSetAlpha(context,0.5);
+  CGContextDrawImage(context, ghostRect, [ghostImage CGImage]);
+  
+  UIImage * imageWithGhost = UIGraphicsGetImageFromCurrentImageContext();
+  UIGraphicsEndImageContext();
+  
+  // 2. Convert out image to Black and White
+  
+  // 2.1 Create a new context with a gray color space
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+  context = CGBitmapContextCreate(nil, inputWidth, inputHeight,
+                           8, 0, colorSpace, (CGBitmapInfo)kCGImageAlphaNone);
+  
+  // 2.2 Draw our image into the new context
+  CGContextDrawImage(context, imageRect, [imageWithGhost CGImage]);
+  
+  // 2.3 Get our new B&W Image
   CGImageRef imageRef = CGBitmapContextCreateImage(context);
+  UIImage * finalImage = [UIImage imageWithCGImage:imageRef];
   
-  // Create a new UIImage object
-  UIImage *newImage = [UIImage imageWithCGImage:imageRef];
-  
-  // Release colorspace, context and bitmap information
+  // Cleanup
   CGColorSpaceRelease(colorSpace);
   CGContextRelease(context);
   CFRelease(imageRef);
   
   // Return the new grayscale image
-  return newImage;
+  return finalImage;
 }
 
 
