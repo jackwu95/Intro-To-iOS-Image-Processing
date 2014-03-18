@@ -53,20 +53,27 @@
   
   CGRect ghostRect = {ghostOrigin, ghostSize};
   
-  // 1.1 Draw our image into a new CGContext
   UIGraphicsBeginImageContext(input.size);
   CGContextRef context = UIGraphicsGetCurrentContext();
+
+  // flip drawing context
+  CGAffineTransform flip = CGAffineTransformMakeScale(1.0, -1.0);
+  CGAffineTransform flipThenShift = CGAffineTransformTranslate(flip,0,-inputHeight);
+  CGContextConcatCTM(context, flipThenShift);
+  
+  // 1.1 Draw our image into a new CGContext
   CGContextDrawImage(context, imageRect, [input CGImage]);
   
   // 1.2 Set Alpha to 0.5 and draw our ghost on
-  CGContextSetBlendMode(context, kCGBlendModeColor);
+  CGContextSetBlendMode(context, kCGBlendModeSourceAtop);
   CGContextSetAlpha(context,0.5);
-  CGContextDrawImage(context, ghostRect, [ghostImage CGImage]);
+  CGRect transformedGhostRect = CGRectApplyAffineTransform(ghostRect, flipThenShift);
+  CGContextDrawImage(context, transformedGhostRect, [ghostImage CGImage]);
   
   UIImage * imageWithGhost = UIGraphicsGetImageFromCurrentImageContext();
   UIGraphicsEndImageContext();
   
-  // 2. Convert out image to Black and White
+  // 2. Convert our image to Black and White
   
   // 2.1 Create a new context with a gray color space
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
@@ -85,7 +92,6 @@
   CGContextRelease(context);
   CFRelease(imageRef);
   
-  // Return the new grayscale image
   return finalImage;
 }
 
