@@ -8,6 +8,7 @@
 
 #import "ImageProcessor.h"
 #import "UIImage+OrientationFix.h"
+//#import <GPUImage/GPUImage.h>
 
 @interface ImageProcessor ()
 

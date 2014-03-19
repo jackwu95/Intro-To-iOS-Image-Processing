@@ -401,6 +401,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SpookCam/SpookCam-Prefix.pch";
 				INFOPLIST_FILE = "SpookCam/SpookCam-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "4A9B4A4C-C9AD-4C0D-81DC-A8704B3A93B1";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -418,6 +422,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SpookCam/SpookCam-Prefix.pch";
 				INFOPLIST_FILE = "SpookCam/SpookCam-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "4A9B4A4C-C9AD-4C0D-81DC-A8704B3A93B1";
 				TARGETED_DEVICE_FAMILY = 1;
