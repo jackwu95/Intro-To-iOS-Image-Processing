@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		042DFE2818D9440300D1E15C /* GPUImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 042DFE2718D9440300D1E15C /* GPUImage.framework */; };
 		047425DB18D7F5CC0062C4C0 /* ghost.png in Resources */ = {isa = PBXBuildFile; fileRef = 047425DA18D7F5CC0062C4C0 /* ghost.png */; };
 		047425DE18D7FF170062C4C0 /* UIImage+OrientationFix.m in Sources */ = {isa = PBXBuildFile; fileRef = 047425DD18D7FF170062C4C0 /* UIImage+OrientationFix.m */; };
 		8411A5CF18BEA02B00DCAC5C /* ImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411A5CE18BEA02B00DCAC5C /* ImageProcessor.m */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		042DFE2718D9440300D1E15C /* GPUImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GPUImage.framework; sourceTree = "<group>"; };
 		047425DA18D7F5CC0062C4C0 /* ghost.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ghost.png; sourceTree = "<group>"; };
 		047425DC18D7FF170062C4C0 /* UIImage+OrientationFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+OrientationFix.h"; sourceTree = "<group>"; };
 		047425DD18D7FF170062C4C0 /* UIImage+OrientationFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+OrientationFix.m"; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84FC4D1218B7F33B00B764C0 /* CoreGraphics.framework in Frameworks */,
+				042DFE2818D9440300D1E15C /* GPUImage.framework in Frameworks */,
 				84FC4D1418B7F33B00B764C0 /* UIKit.framework in Frameworks */,
 				84FC4D1018B7F33B00B764C0 /* Foundation.framework in Frameworks */,
 			);
@@ -109,6 +112,7 @@
 		84FC4D0E18B7F33B00B764C0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				042DFE2718D9440300D1E15C /* GPUImage.framework */,
 				84FC4D0F18B7F33B00B764C0 /* Foundation.framework */,
 				84FC4D1118B7F33B00B764C0 /* CoreGraphics.framework */,
 				84FC4D1318B7F33B00B764C0 /* UIKit.framework */,
@@ -398,6 +402,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Jack Wu (QD3C3FLJHQ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SpookCam/SpookCam-Prefix.pch";
 				INFOPLIST_FILE = "SpookCam/SpookCam-Info.plist";
@@ -419,6 +427,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Jack Wu (QD3C3FLJHQ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SpookCam/SpookCam-Prefix.pch";
 				INFOPLIST_FILE = "SpookCam/SpookCam-Info.plist";

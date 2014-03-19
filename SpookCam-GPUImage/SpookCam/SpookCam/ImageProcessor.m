@@ -8,7 +8,7 @@
 
 #import "ImageProcessor.h"
 #import "UIImage+OrientationFix.h"
-//#import <GPUImage/GPUImage.h>
+#import <GPUImage/GPUImage.h>
 
 @interface ImageProcessor ()
 
@@ -30,7 +30,7 @@
 #pragma mark - Public
 
 - (void)processImage:(UIImage*)inputImage {
-  UIImage * outputImage = [self processUsingCoreImage:inputImage];
+  UIImage * outputImage = [self processUsingGPUImage:inputImage];
   
   if ([self.delegate respondsToSelector:
        @selector(imageProcessorFinishedProcessingWithImage:)]) {
@@ -40,42 +40,34 @@
 
 #pragma mark - Private
 
-- (UIImage *)processUsingCoreImage:(UIImage*)input {
-  // Fix orientation of input
-  input = [input imageWithFixedOrientation];
-
-  CIImage * inputCIImage = [[CIImage alloc] initWithImage:input];
+- (UIImage *)processUsingGPUImage:(UIImage*)input {
   
-  // 1. Create a grayscale filter
-  CIFilter * grayFilter = [CIFilter filterWithName:@"CIColorControls"];
-  [grayFilter setValue:@(0) forKeyPath:@"inputSaturation"];
+  // 1. Create our GPUImagePictures
+  GPUImagePicture * inputGPUImage = [[GPUImagePicture alloc] initWithImage:input];
   
-  // 2. Create our ghost filter
-  
-  // Cheat: create a larger ghost image
+  // Cheat again to get padded ghost image using Core Graphics
   UIImage * ghostImage = [self createPaddedGhostImageWithSize:input.size];
-  CIImage * ghostCIImage = [[CIImage alloc] initWithImage:ghostImage];
+  GPUImagePicture * ghostGPUImage = [[GPUImagePicture alloc] initWithImage:ghostImage];
 
-  CIFilter * alphaFilter = [CIFilter filterWithName:@"CIColorMatrix"];
-  CIVector * alphaVector = [CIVector vectorWithX:0 Y:0 Z:0.5 W:0];
-  [alphaFilter setValue:alphaVector forKeyPath:@"inputAVector"];
+  // 2. Setup our filter chain
+  GPUImageAlphaBlendFilter * alphaBlendFilter = [[GPUImageAlphaBlendFilter alloc] init];
+  alphaBlendFilter.mix = 0.5;
   
-  CIFilter * blendFilter = [CIFilter filterWithName:@"CISourceAtopCompositing"];
+  [inputGPUImage addTarget:alphaBlendFilter atTextureLocation:0];
+  [ghostGPUImage addTarget:alphaBlendFilter atTextureLocation:1];
   
-  // 3. Apply our filters
-  [alphaFilter setValue:ghostCIImage forKeyPath:@"inputImage"];
-  ghostCIImage = [alphaFilter outputImage];
-
-  [blendFilter setValue:ghostCIImage forKeyPath:@"inputImage"];
-  [blendFilter setValue:inputCIImage forKeyPath:@"inputBackgroundImage"];
-  CIImage * blendOutput = [blendFilter outputImage];
+  GPUImageGrayscaleFilter * grayscaleFilter = [[GPUImageGrayscaleFilter alloc] init];
   
-  [grayFilter setValue:blendOutput forKeyPath:@"inputImage"];
-  CIImage * outputCIImage = [grayFilter outputImage];
+  [alphaBlendFilter addTarget:grayscaleFilter];
   
-  UIImage * outputImage = [UIImage imageWithCIImage:outputCIImage scale:input.scale orientation:input.imageOrientation];
+  // 3. Process & grab output image
+  [inputGPUImage processImage];
+  [ghostGPUImage processImage];
+  [grayscaleFilter useNextFrameForImageCapture];
   
-  return outputImage;
+  UIImage * output = [grayscaleFilter imageFromCurrentFramebuffer];
+  
+  return output;
 }
 
 - (UIImage *)createPaddedGhostImageWithSize:(CGSize)inputSize {
@@ -98,6 +90,7 @@
   CGAffineTransform flipThenShift = CGAffineTransformTranslate(flip,0,-inputSize.height);
   CGContextConcatCTM(context, flipThenShift);
   CGRect transformedGhostRect = CGRectApplyAffineTransform(ghostRect, flipThenShift);
+  
   CGContextDrawImage(context, transformedGhostRect, [ghostImage CGImage]);
   
   UIImage * paddedGhost = UIGraphicsGetImageFromCurrentImageContext();
