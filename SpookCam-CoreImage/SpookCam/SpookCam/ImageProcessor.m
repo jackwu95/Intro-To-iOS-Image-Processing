@@ -69,7 +69,11 @@
   [grayFilter setValue:blendOutput forKeyPath:@"inputImage"];
   CIImage * outputCIImage = [grayFilter outputImage];
   
-  UIImage * outputImage = [UIImage imageWithCIImage:outputCIImage scale:input.scale orientation:input.imageOrientation];
+  // 4. Render our output image
+  CIContext * context = [CIContext contextWithOptions:nil];
+  CGImageRef outputCGImage = [context createCGImage:outputCIImage fromRect:[outputCIImage extent]];
+  UIImage * outputImage = [UIImage imageWithCGImage:outputCGImage];
+  CGImageRelease(outputCGImage);
   
   return outputImage;
 }

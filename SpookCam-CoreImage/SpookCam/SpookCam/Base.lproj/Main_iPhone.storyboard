@@ -24,8 +24,8 @@
                                 <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="320" id="JjY-E2-K9h"/>
-                                    <constraint firstAttribute="height" constant="44" id="kcJ-uU-CDK"/>
+                                    <constraint firstAttribute="height" constant="44" id="99b-jj-qnb"/>
+                                    <constraint firstAttribute="width" constant="320" id="bCz-LP-Ii1"/>
                                 </constraints>
                                 <items>
                                     <barButtonItem title="Camera" id="Pnw-yS-zLD">
@@ -54,7 +54,7 @@
                             <constraint firstItem="uVb-gU-WCD" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="ZN2-Yo-LSr"/>
                             <constraint firstAttribute="trailing" secondItem="uVb-gU-WCD" secondAttribute="trailing" id="Zm0-1C-S4p"/>
                             <constraint firstItem="uVb-gU-WCD" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="cBy-k5-ppV"/>
-                            <constraint firstItem="t0H-HD-DEP" firstAttribute="leading" secondItem="uVb-gU-WCD" secondAttribute="leading" id="qLG-an-dAk"/>
+                            <constraint firstItem="t0H-HD-DEP" firstAttribute="leading" secondItem="uVb-gU-WCD" secondAttribute="leading" id="mRB-3C-aUU"/>
                         </constraints>
                     </view>
                     <connections>

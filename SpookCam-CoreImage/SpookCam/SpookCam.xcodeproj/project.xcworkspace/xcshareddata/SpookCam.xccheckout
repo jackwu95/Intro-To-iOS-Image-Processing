@@ -5,19 +5,19 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>8B2DD543-19B2-4623-887F-A0FBEE8F1091</string>
+	<string>C08C1D9B-733C-4E31-B97F-F7893C13CDAD</string>
 	<key>IDESourceControlProjectName</key>
 	<string>SpookCam</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>402D4094-581A-4D4A-8351-32338C7CDC80</key>
+		<key>D606BA18-8F7E-4F1E-99BE-CE4E05911E55</key>
 		<string>https://github.com/jackwu95/Intro-To-iOS-Image-Processing.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>SpookCam-CoreImage/SpookCam/SpookCam.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>402D4094-581A-4D4A-8351-32338C7CDC80</key>
+		<key>D606BA18-8F7E-4F1E-99BE-CE4E05911E55</key>
 		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -25,14 +25,14 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>402D4094-581A-4D4A-8351-32338C7CDC80</string>
+	<string>D606BA18-8F7E-4F1E-99BE-CE4E05911E55</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>402D4094-581A-4D4A-8351-32338C7CDC80</string>
+			<string>D606BA18-8F7E-4F1E-99BE-CE4E05911E55</string>
 			<key>IDESourceControlWCCName</key>
 			<string>Intro-To-iOS-Image-Processing</string>
 		</dict>

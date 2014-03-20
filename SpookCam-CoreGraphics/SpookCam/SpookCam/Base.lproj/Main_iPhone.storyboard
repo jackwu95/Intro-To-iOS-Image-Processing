@@ -23,6 +23,10 @@
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t0H-HD-DEP">
                                 <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="320" id="ajT-Yd-wAH"/>
+                                    <constraint firstAttribute="height" constant="44" id="eo5-FB-uZG"/>
+                                </constraints>
                                 <items>
                                     <barButtonItem title="Camera" id="Pnw-yS-zLD">
                                         <connections>
