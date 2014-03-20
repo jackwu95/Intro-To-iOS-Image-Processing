@@ -1,0 +1,26 @@
+Title: "Introduction to Image Processing in iOS"
+
+1) First step to image processing - what's an Image?
+
+  a) Explain how an uncompressed image in memory is simply an array of pixels [include diagram]
+  b) Explain a "Pixel", in 32-bit RGBA format, but touch upon other formats (HSV, YUV, 16-bit RGBA,etc)
+  c) Talk briefly about color spaces, and the merits of understanding HSV and RGB
+  d) Touch upon JPEG/PNG as compression formats
+  e) [Code snippet] Core Graphics code to read in an image and convert it to a buffer so you can see each pixel value
+  f) [Downloadable project] The above code, that reads in a small image and logs the raw color values in a nice grid (use the same small image from the diagram in part A)
+
+2) The five methods.
+
+For each of these methods, implement the same filter in each method so the reader can see the differences (maybe the grainy filter, or a blur filter or something). For each method, include:
+
+  a) a discussion of how the method works (use illustrations as appropriate)
+  b) and include code snippets throughout (but not step-by-step instructions)
+  c) Then at the end of each section, include a downloadable demo that shows that simple filter implemented in that method.
+
+Method 1: setting each pixel on your own using a for loop (brute force) Go into detail here though, understanding this will allow you to "create your own effects" [discussion/code snippets/downloadable demo]
+Method 2: Using CoreGraphics and the Quartz2D frameworks (slightly old but still important) [discussion/code snippets/downloadable demo]
+Method 3: Using CoreImage framework (latest and greatest)  [discussion/code snippets/downloadable demo]
+Method 4: GPUImage [discussion/code snippets/downloadable demo]
+Method 4: OpenGL and shaders. [discussion/code snippets/downloadable demo]-ommited
+
+3) Where to go from here?
