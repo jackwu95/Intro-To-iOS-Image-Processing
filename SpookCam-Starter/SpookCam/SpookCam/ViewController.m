@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "ImageProcessor.h"
 #import "UIImage+OrientationFix.h"
 
 @interface ViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -67,7 +68,7 @@
   self.mainImageView.image = fixedImage;
   
   // Commence with processing!
-  [self logPixelsOfImage:fixedImage];
+  //[self logPixelsOfImage:fixedImage];
 }
 
 - (void)logPixelsOfImage:(UIImage*)image {
@@ -120,6 +121,11 @@
 }
 
 #pragma mark - Protocol Conformance
+
+- (void)imageProcessorFinishedProcessingWithImage:(UIImage *)outputImage {
+  self.workingImage = outputImage;
+  self.mainImageView.image = outputImage;
+}
 
 #pragma mark - UIImagePickerDelegate
 

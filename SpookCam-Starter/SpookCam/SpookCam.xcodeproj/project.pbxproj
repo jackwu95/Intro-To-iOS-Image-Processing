@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		042DFE2A18D949D500D1E15C /* ghost_tiny.png in Resources */ = {isa = PBXBuildFile; fileRef = 042DFE2918D949D500D1E15C /* ghost_tiny.png */; };
 		04CF99DE18DA8CD40070E211 /* UIImage+OrientationFix.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF99DD18DA8CD40070E211 /* UIImage+OrientationFix.m */; };
+		04CF99E418DA8F100070E211 /* ImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF99E318DA8F100070E211 /* ImageProcessor.m */; };
 		84FC4D1018B7F33B00B764C0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FC4D0F18B7F33B00B764C0 /* Foundation.framework */; };
 		84FC4D1218B7F33B00B764C0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FC4D1118B7F33B00B764C0 /* CoreGraphics.framework */; };
 		84FC4D1418B7F33B00B764C0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FC4D1318B7F33B00B764C0 /* UIKit.framework */; };
@@ -39,6 +40,8 @@
 		042DFE2918D949D500D1E15C /* ghost_tiny.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ghost_tiny.png; sourceTree = "<group>"; };
 		04CF99DC18DA8CD40070E211 /* UIImage+OrientationFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+OrientationFix.h"; sourceTree = "<group>"; };
 		04CF99DD18DA8CD40070E211 /* UIImage+OrientationFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+OrientationFix.m"; sourceTree = "<group>"; };
+		04CF99E218DA8F100070E211 /* ImageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageProcessor.h; sourceTree = "<group>"; };
+		04CF99E318DA8F100070E211 /* ImageProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageProcessor.m; sourceTree = "<group>"; };
 		84FC4D0C18B7F33B00B764C0 /* SpookCam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpookCam.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84FC4D0F18B7F33B00B764C0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		84FC4D1118B7F33B00B764C0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -122,6 +125,8 @@
 				84FC4D2118B7F33B00B764C0 /* Main_iPhone.storyboard */,
 				84FC4D2718B7F33B00B764C0 /* ViewController.h */,
 				84FC4D2818B7F33B00B764C0 /* ViewController.m */,
+				04CF99E218DA8F100070E211 /* ImageProcessor.h */,
+				04CF99E318DA8F100070E211 /* ImageProcessor.m */,
 				04CF99DC18DA8CD40070E211 /* UIImage+OrientationFix.h */,
 				04CF99DD18DA8CD40070E211 /* UIImage+OrientationFix.m */,
 				042DFE2918D949D500D1E15C /* ghost_tiny.png */,
@@ -258,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84FC4D2918B7F33B00B764C0 /* ViewController.m in Sources */,
+				04CF99E418DA8F100070E211 /* ImageProcessor.m in Sources */,
 				84FC4D2018B7F33B00B764C0 /* AppDelegate.m in Sources */,
 				04CF99DE18DA8CD40070E211 /* UIImage+OrientationFix.m in Sources */,
 				84FC4D1C18B7F33B00B764C0 /* main.m in Sources */,
