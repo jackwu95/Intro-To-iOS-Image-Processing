@@ -68,7 +68,7 @@
   self.mainImageView.image = fixedImage;
   
   // Commence with processing!
-  //[self logPixelsOfImage:fixedImage];
+  [self logPixelsOfImage:fixedImage];
 }
 
 - (void)logPixelsOfImage:(UIImage*)image {
