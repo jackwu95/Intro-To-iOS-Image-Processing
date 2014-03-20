@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04CF99E118DA8D7B0070E211 /* UIImage+OrientationFix.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF99E018DA8D7B0070E211 /* UIImage+OrientationFix.m */; };
 		04F01BD018D5339200A523ED /* ghost.png in Resources */ = {isa = PBXBuildFile; fileRef = 04F01BCE18D5339200A523ED /* ghost.png */; };
 		8411A5CF18BEA02B00DCAC5C /* ImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411A5CE18BEA02B00DCAC5C /* ImageProcessor.m */; };
 		84FC4D1018B7F33B00B764C0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FC4D0F18B7F33B00B764C0 /* Foundation.framework */; };
@@ -36,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04CF99DF18DA8D7B0070E211 /* UIImage+OrientationFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+OrientationFix.h"; sourceTree = "<group>"; };
+		04CF99E018DA8D7B0070E211 /* UIImage+OrientationFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+OrientationFix.m"; sourceTree = "<group>"; };
 		04F01BCE18D5339200A523ED /* ghost.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ghost.png; sourceTree = "<group>"; };
 		8411A5CD18BEA02B00DCAC5C /* ImageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageProcessor.h; sourceTree = "<group>"; };
 		8411A5CE18BEA02B00DCAC5C /* ImageProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageProcessor.m; sourceTree = "<group>"; };
@@ -124,6 +127,8 @@
 				84FC4D2818B7F33B00B764C0 /* ViewController.m */,
 				8411A5CD18BEA02B00DCAC5C /* ImageProcessor.h */,
 				8411A5CE18BEA02B00DCAC5C /* ImageProcessor.m */,
+				04CF99DF18DA8D7B0070E211 /* UIImage+OrientationFix.h */,
+				04CF99E018DA8D7B0070E211 /* UIImage+OrientationFix.m */,
 				04F01BCE18D5339200A523ED /* ghost.png */,
 				84FC4D2A18B7F33B00B764C0 /* Images.xcassets */,
 				84FC4D1618B7F33B00B764C0 /* Supporting Files */,
@@ -259,6 +264,7 @@
 			files = (
 				84FC4D2918B7F33B00B764C0 /* ViewController.m in Sources */,
 				84FC4D2018B7F33B00B764C0 /* AppDelegate.m in Sources */,
+				04CF99E118DA8D7B0070E211 /* UIImage+OrientationFix.m in Sources */,
 				8411A5CF18BEA02B00DCAC5C /* ImageProcessor.m in Sources */,
 				84FC4D1C18B7F33B00B764C0 /* main.m in Sources */,
 			);

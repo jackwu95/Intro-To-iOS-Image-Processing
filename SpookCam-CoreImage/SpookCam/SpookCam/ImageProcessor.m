@@ -40,9 +40,6 @@
 #pragma mark - Private
 
 - (UIImage *)processUsingCoreImage:(UIImage*)input {
-  // Fix orientation of input
-  input = [input imageWithFixedOrientation];
-
   CIImage * inputCIImage = [[CIImage alloc] initWithImage:input];
   
   // 1. Create a grayscale filter

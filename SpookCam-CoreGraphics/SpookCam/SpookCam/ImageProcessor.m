@@ -38,7 +38,6 @@
 #pragma mark - Private
 
 - (UIImage *)processUsingCoreGraphics:(UIImage*)input {
-  
   CGRect imageRect = {CGPointZero,input.size};
   NSInteger inputWidth = CGRectGetWidth(imageRect);
   NSInteger inputHeight = CGRectGetHeight(imageRect);

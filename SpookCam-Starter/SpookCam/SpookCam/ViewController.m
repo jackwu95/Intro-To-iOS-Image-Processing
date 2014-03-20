@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "UIImage+OrientationFix.h"
 
 @interface ViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
@@ -25,6 +26,7 @@
 {
   [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+  [self setupWithImage:[UIImage imageNamed:@"ghost_tiny.png"]];
 }
 
 #pragma mark - Custom Accessors
@@ -60,11 +62,12 @@
 #pragma mark - Private
 
 - (void)setupWithImage:(UIImage*)image {
-  self.workingImage = image;
-  self.mainImageView.image = image;
+  UIImage * fixedImage = [image imageWithFixedOrientation];
+  self.workingImage = fixedImage;
+  self.mainImageView.image = fixedImage;
   
   // Commence with processing!
-  [self logPixelsOfImage:image];
+  [self logPixelsOfImage:fixedImage];
 }
 
 - (void)logPixelsOfImage:(UIImage*)image {
@@ -97,12 +100,12 @@
 #define B(x) ( R((x) >> 16) )
   
   // 2. Iterate and log!
-  NSLog(@"Pixels of image:");
+  NSLog(@"Brightness of image:");
   UInt32 * currentPixel = pixels;
   for (NSUInteger j = 0; j < height; j++) {
     for (NSUInteger i = 0; i < width; i++) {
       UInt32 color = *currentPixel;
-      printf("%3d,%3d,%3d ",(int)R(color),(int)G(color),(int)B(color));
+      printf("%3.0f ", (R(color)+G(color)+B(color))/3.0);
       currentPixel++;
     }
     printf("\n");

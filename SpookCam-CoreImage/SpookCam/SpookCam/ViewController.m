@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "ImageProcessor.h"
+#import "UIImage+OrientationFix.h"
 
 @interface ViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ImageProcessorDelegate>
 
@@ -61,11 +62,12 @@
 #pragma mark - Private
 
 - (void)setupWithImage:(UIImage*)image {
-  self.workingImage = image;
+  UIImage * fixedImage = [image imageWithFixedOrientation];
+  self.workingImage = fixedImage;
   
   // Commence with processing!
   [ImageProcessor sharedProcessor].delegate = self;
-  [[ImageProcessor sharedProcessor] processImage:image];
+  [[ImageProcessor sharedProcessor] processImage:fixedImage];
 }
 
 #pragma mark - Protocol Conformance
