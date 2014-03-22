@@ -122,20 +122,23 @@ code that uses Core Graphics to accomplish this :
 	
 Walking through the comments, this is what's going on:
 
-1. We gather some data on image and get its CGImage object
+1. Gather some data on image and get its CGImage object
 
-2. For the 32-bit RGBA color space we are working in, we hardcode the parameters bytesPerPixel and
-bitsPerComponent. We then calculate bytesPerRow of our image. Finally, we allocate the array that
-we will use to store the pixels of the image. 
+2. For the 32-bit RGBA color space you are working in, you can hardcode the parameters bytesPerPixel and
+bitsPerComponent and then calculate bytesPerRow of the image. Finally, an array is allocated to store the
+ pixels of the image. 
 
-3. We create an RGB colorspace and a CGBitmapContext, passing in our pixels pointer to be where
-the pixel data is stored
+3. Create an RGB colorspace and a CGBitmapContext, passing in the pixels pointer as the buffer to store
+the pixel data this context holds.
 
-4. We draw the input image into this context. This populates pixels with the pixel data of image, 
+4. Draw the input image into the context. This populates pixels with the pixel data of image, 
 in the format we specified (RGB color space, 4 bytesPerPixel, 8 bitsPerComponent, Alpha is last component,
 use 32-bit big endian to order in memory).
 
-5. Cleanup our colorspace and context objects.
+5. Cleanup the colorspace and context objects.
+
+Note - Normally when you show an image, the image is is decoded in the GPU's memory to render to the screen,
+thats why we need to obtain a copy of the pixels in the main memory to access them.
 
 After these steps, pixels holds the raw pixel data in RGBA format of image. 
 The next few lines iterate through pixels and print out the brightness:
@@ -160,11 +163,39 @@ The next few lines iterate through pixels and print out the brightness:
 		printf("\n");
 	}
 
-	free(pixels);
-  
-	#undef R
-	#undef G
-	#undef B
+Here is whats going on -
 
-Note - Normally when you show an image, the image is is decoded in the GPU's memory to render to the screen,
-thats why we need to obtain a copy of the pixels in the main memory to access them.
+1. Define some macros to simplify working with our 32-bit pixels. To access the red component,
+you mask out the first 8 bits. To access the others, you perform a bit-shift and then a mask.
+
+2. Get a pointer of the first pixel and run a double for-loop to iterate through the pixels, this
+can also be done using a single for-loop iterating from 0 to width * height.
+
+3. Get the color of the current pixel by de-referencing the pointer and log the brightness of the
+pixel.
+
+4. Increment currentPixel to move on to the next pixel. For those of you who might be rusty on your
+pointer arithmetic, since currentPixel is a pointer to UInt32, when you add 1 to the pointer, it moves
+forward by 4 bytes (32-bits), bringing us to the next pixel.
+
+An alternative to this method would be to declare currentPixel as a pointer to an 8-bit type (ie char). 
+This way each time you increment, you move to the next component of the image and by de-referencing it,
+you get the 8-bit value of the component.
+
+Time to process some images.
+
+[Ghosty -> Processor -> Processed Cheese]
+
+There are several different ways you can do image processing on iOS. Today I am going to introduce you
+to four different methods of producing the same effect. The methods are 1. Direct pixel manipulation
+2. Core Graphics Library 3. Core Image Library 4. 3rd-party GPUImage library. The effect you will
+be implementing contains two steps. 
+
+1. Blend ghosty onto your image with 50% alpha
+2. Make the resulting image Black and White
+
+Let's get started!
+[Ghosty - I'm scared]
+
+
+

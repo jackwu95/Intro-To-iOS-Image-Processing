@@ -73,20 +73,18 @@
 
 - (void)logPixelsOfImage:(UIImage*)image {
   // 1. Get pixels of image
-  UInt32 * pixels;
-  
   CGImageRef inputCGImage = [image CGImage];
   NSUInteger width = CGImageGetWidth(inputCGImage);
   NSUInteger height = CGImageGetHeight(inputCGImage);
-  
-  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   
   NSUInteger bytesPerPixel = 4;
   NSUInteger bytesPerRow = bytesPerPixel * width;
   NSUInteger bitsPerComponent = 8;
   
+  UInt32 * pixels;
   pixels = (UInt32 *) calloc(height * width, sizeof(UInt32));
   
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   CGContextRef context = CGBitmapContextCreate(pixels, width, height,
                                                bitsPerComponent, bytesPerRow, colorSpace,
                                                kCGImageAlphaPremultipliedLast|kCGBitmapByteOrder32Big);
@@ -96,9 +94,10 @@
   CGColorSpaceRelease(colorSpace);
   CGContextRelease(context);
   
-#define R(x) ( ((x) & 0xFF) )
-#define G(x) ( R((x) >> 8)  )
-#define B(x) ( R((x) >> 16) )
+#define Mask8(x) ( (x) & 0xFF )
+#define R(x) ( Mask8(x) )
+#define G(x) ( Mask8(x >> 8 ) )
+#define B(x) ( Mask8(x >> 16) )
   
   // 2. Iterate and log!
   NSLog(@"Brightness of image:");
