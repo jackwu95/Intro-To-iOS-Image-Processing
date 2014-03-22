@@ -1,0 +1,170 @@
+Intro To iOS Image Processing
+
+You just took the best selfie of your life. It is spectacular, it is magnificent. 
+You are going to get thousands of likes, up-votes, karma, retweets, because you are absolutely gorgeous.
+But thats too tame, you want millions, you want to be a star. 
+Now if only you could add something to this photo to make it go viral...
+
+I'm not saying that everyone has been there before, but many have, and the next step for many
+is to open up their favorite App on their phone to do some touching-up. 
+
+
+Getting Started
+
+First step - What's an image? [Ghosty!]
+
+Ghosty here is not a real ghost, he is an image. So what exactly is an image?
+An image is simply a collection of pixels, each assigned one specific color, arranged
+like a 2-dimensional array.
+Here is Ghosty zoomed in - each square you see is a pixel, notice how each pixel has one
+single color.
+
+So....What's a pixel?
+As mentioned above, a pixel is simply a color. However, there are many (or infinite) ways
+of storing a color. The most common, and simplest to understand, method is called 32-bit RGBA.
+As the name entails, each color is stored in 32 bits and contains four components using 8 bits each.
+The components are R for red, G for green B for blue, and A for alpha.
+
+As you might've learned before, the primary colors for light are Red, Green, and Blue. With these
+three colors, you can create any other color you want! However, since we are using 8-bits for each
+of these, the total amount of colors we can actually create using 32-bit RGBA is 2^8 * 2^8 * 2^8 ~ 17 million colors.
+
+The alpha component is quite different from the others. You can think of it as "transparency", just
+like the alpha property of UIViews. The alpha component of a color doesn't really mean anything unless
+there is a color behind it, at which time it tells the graphics processor how "transparent" it is and how
+much of the color behind to show. We will discuss this in greater depth later on when we talk about blending.
+
+Color spaces
+
+The RGBA method to store pixels is an example of a "Color Space". It is one of many methods you can store colors.
+The upsides of this method, as you might guess, is that its very simple for us and the computer to interpret and
+manipulate. 
+The downside of this method is that the way it represents colors is not very intuitive for us to visualize. What
+I mean by this is if I gave you the RGB of a color, it is very hard, without tons of experience, to know what kind
+of color it produces.
+
+Two other more popular color spaces are HSV(HSL) and YUV. 
+
+HSV is a much more intuitive way to describe colors. You can think of Hue as "color", saturation as "How much color", or
+"How full is this color", and Value (or Lightness), as the "brightness". In this color space, if you gave me some
+HSV values, I could quite accurately picture the color that they describe.
+
+YUV is another popular color space simply because TVs use it, and for good reason. I've leave it up to you
+to do some research on YUV and other color spaces :]
+
+One last note - 16-bit RGB is a memory optimization on RGBA that could be useful if memory is an issue. it uses
+5 bits for R, 6 bits for G, and 5 bits for B to store a color. The reason it uses 6 bits for green is quite interesting,
+the human eye has lower resolution for changes in green, and thus we need more bits so we can produce different greens.
+Here is an example on that - [Image for differences in green and say, red].
+
+JPEG, PNG
+
+So far we have talked about "raw" images, as in each pixel is stored individually in memory. If you do some quick
+calculations, an 8 megapixel image would take 8 * 10^6 pixels * 4 bytes/pixel = 32 Megabytes to store! Thats a lot!
+This is where JPEG, PNG, and other image formats come in. These are simply put, compression formats for images. Before
+you start working on your killer app, you should know that JPEG optimizes away the alpha channel, and thus cannot support
+images with transparency.
+
+- Start writing code!
+
+Alrighty! Now that you have a basic understanding of an image, lets get coding! Today we are going to revolutionize
+the selfie scene, by introducing SpookCam, the app that brings ghosty into your selfie!
+
+Please download the starter kit for SpookCam here - [starter kit], open it in XCode, and we shall continue.
+
+In the starter kit, the app will load a tiny version of ghosty from the bundle, convert it into a pixel buffer, 
+and print out the brightness of each pixel to the screen. Whats the brightness? It's simply the average of the
+red, green, and blue components of the image.
+
+Now go ahead and run it! You should see it output something like this:
+[Screenshot1 - pixel output]
+
+And on your screen, you see tiny ghosty!
+[Screenshot2 - ghosty]
+Pretty neat right? Notice how the outer pixels have an alpha of 0, so even though they have a brightness of 0, which means
+they should be black, but you can't see them. To verify that they are transparent, try setting the imageView's 
+background color to red and run the App again.
+
+Now take a quick look at the code. This starter kit uses UIImagePicker to allow you to pick images from the album
+or take pictures using the camera. After an image is selected, setupWithImage: is called, which in this case,
+outputs the brightness of each pixel to the log.
+
+Let's look at how its done - 
+The first step is to convert our UIImage into an array of pixels that we can access directly. Here is the
+code that uses Core Graphics to accomplish this :
+
+  
+  	// 1.
+	CGImageRef inputCGImage = [image CGImage];
+	NSUInteger width = CGImageGetWidth(inputCGImage);
+	NSUInteger height = CGImageGetHeight(inputCGImage);
+
+	// 2.
+	NSUInteger bytesPerPixel = 4;
+	NSUInteger bytesPerRow = bytesPerPixel * width;
+	NSUInteger bitsPerComponent = 8;
+
+	UInt32 * pixels;
+	pixels = (UInt32 *) calloc(height * width, sizeof(UInt32));
+
+	// 3.
+	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+	CGContextRef context = CGBitmapContextCreate(pixels, width, height,
+											   bitsPerComponent, bytesPerRow, colorSpace,
+											   kCGImageAlphaPremultipliedLast|kCGBitmapByteOrder32Big);
+
+	// 4.
+	CGContextDrawImage(context, CGRectMake(0, 0, width, height), inputCGImage);
+
+	// 5. Cleanup
+	CGColorSpaceRelease(colorSpace);
+	CGContextRelease(context);
+	
+Walking through the comments, this is what's going on:
+
+1. We gather some data on image and get its CGImage object
+
+2. For the 32-bit RGBA color space we are working in, we hardcode the parameters bytesPerPixel and
+bitsPerComponent. We then calculate bytesPerRow of our image. Finally, we allocate the array that
+we will use to store the pixels of the image. 
+
+3. We create an RGB colorspace and a CGBitmapContext, passing in our pixels pointer to be where
+the pixel data is stored
+
+4. We draw the input image into this context. This populates pixels with the pixel data of image, 
+in the format we specified (RGB color space, 4 bytesPerPixel, 8 bitsPerComponent, Alpha is last component,
+use 32-bit big endian to order in memory).
+
+5. Cleanup our colorspace and context objects.
+
+After these steps, pixels holds the raw pixel data in RGBA format of image. 
+The next few lines iterate through pixels and print out the brightness:
+
+	// 1.
+	#define Mask8(x) ( (x) & 0xFF )
+	#define R(x) ( Mask8(x) )
+	#define G(x) ( Mask8(x >> 8 ) )
+	#define B(x) ( Mask8(x >> 16) )
+  
+	NSLog(@"Brightness of image:");
+	// 2.
+	UInt32 * currentPixel = pixels;
+	for (NSUInteger j = 0; j < height; j++) {
+		for (NSUInteger i = 0; i < width; i++) {
+		  // 3.
+		  UInt32 color = *currentPixel;
+		  printf("%3.0f ", (R(color)+G(color)+B(color))/3.0);
+		  // 4.
+		  currentPixel++;
+		}
+		printf("\n");
+	}
+
+	free(pixels);
+  
+	#undef R
+	#undef G
+	#undef B
+
+Note - Normally when you show an image, the image is is decoded in the GPU's memory to render to the screen,
+thats why we need to obtain a copy of the pixels in the main memory to access them.
