@@ -10,7 +10,7 @@
 #import "ImageProcessor.h"
 #import "UIImage+OrientationFix.h"
 
-@interface ViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface ViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ImageProcessorDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *mainImageView;
 

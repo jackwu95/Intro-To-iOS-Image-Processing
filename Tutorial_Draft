@@ -189,7 +189,7 @@ Time to process some images.
 There are several different ways you can do image processing on iOS. Today I am going to introduce you
 to four different methods of producing the same effect. The methods are 1. Direct pixel manipulation
 2. Core Graphics Library 3. Core Image Library 4. 3rd-party GPUImage library. The effect you will
-be implementing contains two steps. 
+be implementing consists of two steps: 
 
 1. Blend ghosty onto your image with 50% alpha
 2. Make the resulting image Black and White

@@ -68,30 +68,17 @@
   
   CGContextDrawImage(context, CGRectMake(0, 0, inputWidth, inputHeight), inputCGImage);
   
-  // 2. Convert the image to Black & White
-  for (NSUInteger j = 0; j < inputHeight; j++) {
-    for (NSUInteger i = 0; i < inputWidth; i++) {
-      UInt32 * currentPixel = inputPixels + (j * inputWidth) + i;
-      UInt32 color = *currentPixel;
-      
-      // Average of RGB = greyscale
-      UInt32 averageColor = (R(color) + G(color) + B(color)) / 3.0;
-      
-      *currentPixel = RGBAMake(averageColor, averageColor, averageColor, A(color));
-    }
-  }
-  
-  // 3. Blend the ghost onto the image
+  // 2. Blend the ghost onto the image
   UIImage * ghostImage = [UIImage imageNamed:@"ghost"];
   CGImageRef ghostCGImage = [ghostImage CGImage];
   
-  // 3.1 Calculate the size & position of the ghost
+  // 2.1 Calculate the size & position of the ghost
   CGFloat ghostImageAspectRatio = ghostImage.size.width / ghostImage.size.height;
   NSInteger targetGhostWidth = inputWidth * 0.25;
   CGSize ghostSize = CGSizeMake(targetGhostWidth, targetGhostWidth / ghostImageAspectRatio);
   CGPoint ghostOrigin = CGPointMake(inputWidth * 0.5, inputHeight * 0.2);
   
-  // 3.2 Scale & Get pixels of the ghost
+  // 2.2 Scale & Get pixels of the ghost
   NSUInteger ghostBytesPerRow = bytesPerPixel * ghostSize.width;
   
   UInt32 * ghostPixels = (UInt32 *)calloc(ghostSize.width * ghostSize.height, sizeof(UInt32));
@@ -102,7 +89,7 @@
   
   CGContextDrawImage(ghostContext, CGRectMake(0, 0, ghostSize.width, ghostSize.height),ghostCGImage);
   
-  // 3.3 Blend each pixel
+  // 2.3 Blend each pixel
   NSUInteger offsetPixelCountForInput = ghostOrigin.y * inputWidth + ghostOrigin.x;
   for (NSUInteger j = 0; j < ghostSize.height; j++) {
     for (NSUInteger i = 0; i < ghostSize.width; i++) {
@@ -127,6 +114,19 @@
     }
   }
   
+  // 3. Convert the image to Black & White
+  for (NSUInteger j = 0; j < inputHeight; j++) {
+    for (NSUInteger i = 0; i < inputWidth; i++) {
+      UInt32 * currentPixel = inputPixels + (j * inputWidth) + i;
+      UInt32 color = *currentPixel;
+      
+      // Average of RGB = greyscale
+      UInt32 averageColor = (R(color) + G(color) + B(color)) / 3.0;
+      
+      *currentPixel = RGBAMake(averageColor, averageColor, averageColor, A(color));
+    }
+  }
+
   // 4. Create a new UIImage
   CGImageRef newCGImage = CGBitmapContextCreateImage(context);
   UIImage * processedImage = [UIImage imageWithCGImage:newCGImage];
