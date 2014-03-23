@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		042DFE2A18D949D500D1E15C /* ghost_tiny.png in Resources */ = {isa = PBXBuildFile; fileRef = 042DFE2918D949D500D1E15C /* ghost_tiny.png */; };
+		0482362218DE65C900A0090E /* ghost.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482362118DE65C900A0090E /* ghost.png */; };
 		04CF99DE18DA8CD40070E211 /* UIImage+OrientationFix.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF99DD18DA8CD40070E211 /* UIImage+OrientationFix.m */; };
 		04CF99E418DA8F100070E211 /* ImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF99E318DA8F100070E211 /* ImageProcessor.m */; };
 		84FC4D1018B7F33B00B764C0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FC4D0F18B7F33B00B764C0 /* Foundation.framework */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		042DFE2918D949D500D1E15C /* ghost_tiny.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ghost_tiny.png; sourceTree = "<group>"; };
+		0482362118DE65C900A0090E /* ghost.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ghost.png; sourceTree = "<group>"; };
 		04CF99DC18DA8CD40070E211 /* UIImage+OrientationFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+OrientationFix.h"; sourceTree = "<group>"; };
 		04CF99DD18DA8CD40070E211 /* UIImage+OrientationFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+OrientationFix.m"; sourceTree = "<group>"; };
 		04CF99E218DA8F100070E211 /* ImageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageProcessor.h; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				04CF99DC18DA8CD40070E211 /* UIImage+OrientationFix.h */,
 				04CF99DD18DA8CD40070E211 /* UIImage+OrientationFix.m */,
 				042DFE2918D949D500D1E15C /* ghost_tiny.png */,
+				0482362118DE65C900A0090E /* ghost.png */,
 				84FC4D2A18B7F33B00B764C0 /* Images.xcassets */,
 				84FC4D1618B7F33B00B764C0 /* Supporting Files */,
 			);
@@ -241,6 +244,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84FC4D2B18B7F33B00B764C0 /* Images.xcassets in Resources */,
+				0482362218DE65C900A0090E /* ghost.png in Resources */,
 				042DFE2A18D949D500D1E15C /* ghost_tiny.png in Resources */,
 				84FC4D2318B7F33B00B764C0 /* Main_iPhone.storyboard in Resources */,
 				84FC4D1A18B7F33B00B764C0 /* InfoPlist.strings in Resources */,
