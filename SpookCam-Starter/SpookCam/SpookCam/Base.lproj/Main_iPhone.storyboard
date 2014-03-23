@@ -19,13 +19,14 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uVb-gU-WCD">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="524"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="524" id="Fhl-06-0a6"/>
-                                </constraints>
                             </imageView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t0H-HD-DEP">
                                 <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="X1H-PO-zdq"/>
+                                    <constraint firstAttribute="width" constant="320" id="Yps-dK-E9n"/>
+                                </constraints>
                                 <items>
                                     <barButtonItem title="Camera" id="Pnw-yS-zLD">
                                         <connections>
@@ -48,12 +49,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="uVb-gU-WCD" secondAttribute="trailing" id="KYd-sY-QEB"/>
-                            <constraint firstItem="uVb-gU-WCD" firstAttribute="leading" secondItem="t0H-HD-DEP" secondAttribute="leading" id="d3e-fV-QHQ"/>
-                            <constraint firstItem="uVb-gU-WCD" firstAttribute="trailing" secondItem="t0H-HD-DEP" secondAttribute="trailing" id="okK-5N-nxJ"/>
-                            <constraint firstItem="uVb-gU-WCD" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="sbJ-4T-uBH"/>
-                            <constraint firstItem="uVb-gU-WCD" firstAttribute="bottom" secondItem="t0H-HD-DEP" secondAttribute="top" id="uBI-d1-vAp"/>
-                            <constraint firstItem="uVb-gU-WCD" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="wjW-tn-7Sm"/>
+                            <constraint firstItem="AQt-AX-NqE" firstAttribute="top" secondItem="t0H-HD-DEP" secondAttribute="bottom" id="Mno-IC-uKG"/>
+                            <constraint firstAttribute="trailing" secondItem="uVb-gU-WCD" secondAttribute="trailing" id="N8z-gW-rH1"/>
+                            <constraint firstItem="t0H-HD-DEP" firstAttribute="top" secondItem="uVb-gU-WCD" secondAttribute="bottom" id="NNL-yW-smp"/>
+                            <constraint firstItem="uVb-gU-WCD" firstAttribute="top" secondItem="a21-Iv-jXl" secondAttribute="bottom" constant="-20" id="UDP-zj-5Xb"/>
+                            <constraint firstItem="uVb-gU-WCD" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="W6G-S0-Pj7"/>
+                            <constraint firstItem="t0H-HD-DEP" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="wmy-7Y-Ve5"/>
+                            <constraint firstAttribute="trailing" secondItem="t0H-HD-DEP" secondAttribute="trailing" id="xRO-c9-gmu"/>
                         </constraints>
                     </view>
                     <connections>
