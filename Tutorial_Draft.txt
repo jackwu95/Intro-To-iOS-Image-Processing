@@ -1,112 +1,75 @@
 Intro To iOS Image Processing
 
-You just took the best selfie of your life. It is spectacular, it is magnificent. 
-You are going to get thousands of likes, up-votes, karma, retweets, because you are absolutely gorgeous.
-But thats too tame, you want millions, you want to be a star. 
-Now if only you could add something to this photo to make it go viral...
+You just took the best selfie of your life. It is spectacular, it is magnificent. You are going to get thousands of likes, up-votes, karma, retweets, because you are absolutely gorgeous. But thats too tame, you want millions, you want to be a star. Now if only you could add something to this photo to make it go viral...
 
-I'm not saying that everyone has been there before, but many have, and the next step for many
-is to open up their favorite App on their phone to do some touching-up. 
+I'm not saying that everyone has been there before, but many have, and the next step for many is to open up their favorite App on their phone to do some touching-up. 
 
 
 Getting Started
 
 First step - What's an image? [Ghosty!]
 
-Ghosty here is not a real ghost, he is an image. So what exactly is an image?
-An image is simply a collection of pixels, each assigned one specific color, arranged
-like a 2-dimensional array. 
+Ghosty here is not a real ghost, he is an image. So what exactly is an image? 
+
+An image is simply a collection of pixels, each assigned one specific color, arranged like a 2-dimensional array. 
 
 Here is Ghosty zoomed in - each square you see is a pixel, notice how each pixel has one
 single color.
 
 So....What's a pixel?
-As mentioned above, a pixel is simply a color. However, there are many (or infinite) ways
-of storing a color. The most common, and simplest to understand, method is called 32-bit RGBA.
-As the name entails, each color is stored in 32 bits and contains four components using 8 bits each.
-The components are R for red, G for green B for blue, and A for alpha.
+As mentioned above, a pixel is simply a color. However, there are many (or infinite) ways of storing a color. The most common, and simplest to understand, method is called 32-bit RGBA. As the name entails, each color is stored in 32 bits and contains four components using 8 bits each. The components are R for red, G for green B for blue, and A for alpha.
 
-As you might've learned before, the primary colors for light are Red, Green, and Blue. With these
-three colors, you can create any other color you want! However, since we are using 8-bits for each
-of these, the total amount of colors we can actually create using 32-bit RGBA is 2^8 * 2^8 * 2^8 ~ 17 million colors.
+As you might've learned before, the primary colors for light are Red, Green, and Blue. With these three colors, you can create any other color you want! However, since we are using 8-bits for each of these, the total amount of colors we can actually create using 32-bit RGBA is 2^8 * 2^8 * 2^8 ~ 17 million colors.
 
-The alpha component is quite different from the others. You can think of it as "transparency", just
-like the alpha property of UIViews. The alpha component of a color doesn't really mean anything unless
-there is a color behind it, at which time it tells the graphics processor how "transparent" it is and how
-much of the color behind to show. We will discuss this in greater depth later on when we talk about blending.
+The alpha component is quite different from the others. You can think of it as "transparency", just like the alpha property of UIViews. The alpha component of a color doesn't really mean anything unless there is a color behind it, at which time it tells the graphics processor how "transparent" it is and how much of the color behind to show. We will discuss this in greater depth later on when we talk about blending.
 
 NOTE: This is why you hear the term "Bitmap". A bitmap is a 2D map of pixels, each one comprised of bits!
 
-Coordinate system
+Coordinate systems
 
-Since an image is a 2D map of pixels, the origin will need to be specified. Usually the origin is either
-the top-left corner of the image, with the y-axis pointing downwards, or at the bottom left, with the
-y-axis pointing upwards.
+Since an image is a 2D map of pixels, the origin will need to be specified. Usually the origin is either the top-left corner of the image, with the y-axis pointing downwards, or at the bottom left, with the y-axis pointing upwards.
 
 There is no correct coordinate system, and even Apple seems to be struggling to determine which one to use.
-Currently, Core Graphics uses the top-left corner as the origin and Core Image uses the bottom-left. This is
-important to remember so you don't get confused when Core Image returns you an "upside down" image.
+Currently, UIImage and UIViews use the top-left corner as the origin and Core Image and Core Graphics uses the bottom-left. This is important to remember so you don't get confused when Core Image returns you an "upside down" image.
 
 Color spaces
 
-The RGBA method to store pixels is an example of a "Color Space". It is one of many methods you can store colors.
-The upsides of this method, as you might guess, is that its very simple for us and the computer to interpret and
-manipulate. 
-The downside of this method is that the way it represents colors is not very intuitive for us to visualize. What
-I mean by this is if I gave you the RGB of a color, it is very hard, without tons of experience, to know what kind
-of color it produces.
+The RGBA method to store pixels is an example of a "Color Space". It is one of many methods you can store colors. The upsides of this method, as you might guess, is that its very simple for us and the computer to interpret and manipulate. 
+The downside of this method is that the way it represents colors is not very intuitive for us to visualize. What I mean by this is if I gave you the RGB of a color, it is very hard, without tons of experience, to know what kind of color it produces.
 
 Two other more popular color spaces are HSV(HSL) and YUV. 
 
-HSV is a much more intuitive way to describe colors. You can think of Hue as "color", saturation as "How much color", or
-"How full is this color", and Value (or Lightness), as the "brightness". In this color space, if you gave me some
-HSV values, I could quite accurately picture the color that they describe.
+HSV is a much more intuitive way to describe colors. You can think of Hue as "color", saturation as "How much color", or "How full is this color", and Value (or Lightness), as the "brightness". In this color space, if you gave me some HSV values, I could quite accurately picture the color that they describe.
 
-YUV is another popular color space simply because TVs use it, and for good reason. I've leave it up to you
-to do some research on YUV and other color spaces :]
+YUV is another popular color space simply because TVs use it, and for good reason. I've leave it up to you to do some research on YUV and other color spaces :]
 
-One last note - 16-bit RGB is a memory optimization on RGBA that could be useful if memory is an issue. it uses
-5 bits for R, 6 bits for G, and 5 bits for B to store a color. The reason it uses 6 bits for green is quite interesting,
-the human eye has lower resolution for changes in green, and thus we need more bits so we can produce different greens.
-Here is an example on that - [Image for differences in green and say, red].
+One last note - 16-bit RGB is a memory optimization on RGBA that could be useful if memory is an issue. it uses 5 bits for R, 6 bits for G, and 5 bits for B to store a color. The reason it uses 6 bits for green is quite interesting, the human eye has lower resolution for changes in green, and thus we need more bits so we can produce different greens. Here is an example on that - [Image for differences in green and say, red].
 
 JPEG, PNG
 
-So far we have talked about "raw" images, as in each pixel is stored individually in memory. If you do some quick
-calculations, an 8 megapixel image would take 8 * 10^6 pixels * 4 bytes/pixel = 32 Megabytes to store! Thats a lot!
-This is where JPEG, PNG, and other image formats come in. These are simply put, compression formats for images. Before
-you start working on your killer app, you should know that JPEG optimizes away the alpha channel, and thus cannot support
-images with transparency.
+So far we have talked about "raw" images, as in each pixel is stored individually in memory. If you do some quick calculations, an 8 megapixel image would take 8 * 10^6 pixels * 4 bytes/pixel = 32 Megabytes to store! Thats a lot! This is where JPEG, PNG, and other image formats come in. These are simply put, compression formats for images. Before you start working on your killer app, you should know that JPEG optimizes away the alpha channel, and thus cannot support images with transparency.
 
 - Start writing code!
 
-Alrighty! Now that you have a basic understanding of an image, lets get coding! Today we are going to revolutionize
-the selfie scene, by introducing SpookCam, the app that brings ghosty into your selfie!
+Alrighty! Now that you have a basic understanding of an image, lets get coding! Today we are going to revolutionize the selfie scene, by introducing SpookCam, the app that brings ghosty into your selfie!
 
 Please download the starter kit for SpookCam here - [starter kit], open it in XCode, and we shall continue.
 
-In the starter kit, the app will load a tiny version of ghosty from the bundle, convert it into a pixel buffer, 
-and print out the brightness of each pixel to the screen. Whats the brightness? It's simply the average of the
-red, green, and blue components of the image.
+In the starter kit, the app will load a tiny version of ghosty from the bundle, convert it into a pixel buffer,  and print out the brightness of each pixel to the screen. Whats the brightness? It's simply the average of the red, green, and blue components of the image.
 
 Now go ahead and run it! You should see it output something like this:
 [Screenshot1 - pixel output]
 
 And on your screen, you see tiny ghosty!
 [Screenshot2 - ghosty]
-Pretty neat right? Notice how the outer pixels have an alpha of 0, so even though they have a brightness of 0, which means
-they should be black, but you can't see them. To verify that they are transparent, try setting the imageView's 
-background color to red and run the App again.
+Pretty neat right? Notice how the outer pixels have an alpha of 0, so even though they have a brightness of 0, which means they should be black, but you can't see them. To verify that they are transparent, try setting the imageView's background color to red and run the App again.
 
-Now take a quick look at the code. This starter kit uses UIImagePicker to allow you to pick images from the album
-or take pictures using the camera. After an image is selected, setupWithImage: is called, which in this case,
-outputs the brightness of each pixel to the log.
+Now take a quick look at the code. This starter kit uses UIImagePicker to allow you to pick images from the album or take pictures using the camera. After an image is selected, setupWithImage: is called, which in this case, outputs the brightness of each pixel to the log.
 
 NOTE - Before we get started, notice how we call
 
 Let's look at how its done - 
-The first step is to convert our UIImage into an array of pixels that we can access directly. Here is the
-code that uses Core Graphics to accomplish this :
+The first step is to convert our UIImage into an array of pixels that we can access directly. Here is the code that uses Core Graphics to accomplish this :
 
   
   	// 1.
@@ -124,9 +87,7 @@ code that uses Core Graphics to accomplish this :
 
 	// 3.
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-	CGContextRef context = CGBitmapContextCreate(pixels, width, height,
-											   bitsPerComponent, bytesPerRow, colorSpace,
-											   kCGImageAlphaPremultipliedLast|kCGBitmapByteOrder32Big);
+	CGContextRef context = CGBitmapContextCreate(pixels, width, height, bitsPerComponent, bytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
 
 	// 4.
 	CGContextDrawImage(context, CGRectMake(0, 0, width, height), inputCGImage);
@@ -139,21 +100,15 @@ Walking through the comments, this is what's going on:
 
 1. Gather some data on image and get its CGImage object
 
-2. For the 32-bit RGBA color space you are working in, you can hardcode the parameters bytesPerPixel and
-bitsPerComponent and then calculate bytesPerRow of the image. Finally, an array is allocated to store the
- pixels of the image. 
+2. For the 32-bit RGBA color space you are working in, you can hardcode the parameters bytesPerPixel and bitsPerComponent and then calculate bytesPerRow of the image. Finally, an array is allocated to store the pixels of the image. 
 
-3. Create an RGB colorspace and a CGBitmapContext, passing in the pixels pointer as the buffer to store
-the pixel data this context holds.
+3. Create an RGB colorspace and a CGBitmapContext, passing in the pixels pointer as the buffer to store the pixel data this context holds.
 
-4. Draw the input image into the context. This populates pixels with the pixel data of image, 
-in the format we specified (RGB color space, 4 bytesPerPixel, 8 bitsPerComponent, Alpha is last component,
-use 32-bit big endian to order in memory).
+4. Draw the input image into the context. This populates pixels with the pixel data of image, in the format we specified (RGB color space, 4 bytesPerPixel, 8 bitsPerComponent, Alpha is last component, use 32-bit big endian to order in memory).
 
 5. Cleanup the colorspace and context objects.
 
-Note - Normally when you show an image, the image is is decoded in the GPU's memory to render to the screen,
-thats why we need to obtain a copy of the pixels in the main memory to access them.
+Note - Normally when you show an image, the image is is decoded in the GPU's memory to render to the screen, thats why we need to obtain a copy of the pixels in the main memory to access them.
 
 After these steps, pixels holds the raw pixel data in RGBA format of image. 
 The next few lines iterate through pixels and print out the brightness:
@@ -180,22 +135,15 @@ The next few lines iterate through pixels and print out the brightness:
 
 Here is whats going on -
 
-1. Define some macros to simplify working with our 32-bit pixels. To access the red component,
-you mask out the first 8 bits. To access the others, you perform a bit-shift and then a mask.
+1. Define some macros to simplify working with our 32-bit pixels. To access the red component, you mask out the first 8 bits. To access the others, you perform a bit-shift and then a mask.
 
-2. Get a pointer of the first pixel and run a double for-loop to iterate through the pixels, this
-can also be done using a single for-loop iterating from 0 to width * height.
+2. Get a pointer of the first pixel and run a double for-loop to iterate through the pixels, this can also be done using a single for-loop iterating from 0 to width * height.
 
-3. Get the color of the current pixel by de-referencing the pointer and log the brightness of the
-pixel.
+3. Get the color of the current pixel by de-referencing the pointer and log the brightness of the pixel.
 
-4. Increment currentPixel to move on to the next pixel. For those of you who might be rusty on your
-pointer arithmetic, since currentPixel is a pointer to UInt32, when you add 1 to the pointer, it moves
-forward by 4 bytes (32-bits), bringing us to the next pixel.
+4. Increment currentPixel to move on to the next pixel. For those of you who might be rusty on your pointer arithmetic, since currentPixel is a pointer to UInt32, when you add 1 to the pointer, it moves forward by 4 bytes (32-bits), bringing us to the next pixel.
 
-An alternative to this method would be to declare currentPixel as a pointer to an 8-bit type (ie char). 
-This way each time you increment, you move to the next component of the image and by de-referencing it,
-you get the 8-bit value of the component.
+An alternative to this method would be to declare currentPixel as a pointer to an 8-bit type (ie char). This way each time you increment, you move to the next component of the image and by de-referencing it, you get the 8-bit value of the component.
 
 Time to process some images.
 
@@ -218,13 +166,9 @@ The effect you will be implementing consists of two steps:
 
 First method - Direct bitmap manipulation
 
-Of the four methods, I will go into the most detail in this one because it is the most fundamental way of
-image processing that will allow you to understand what all the other libraries are doing. In this method,
-we will loop through each pixel, as we did in the starter kit, and assign new colors to them one by one. 
-As you can imagine, this method does not scale well to larger images and more complicated effects.
+Of the four methods, I will go into the most detail in this one because it is the most fundamental way of image processing that will allow you to understand what all the other libraries are doing. In this method, we will loop through each pixel, as we did in the starter kit, and assign new colors to them one by one. As you can imagine, this method does not scale well to larger images and more complicated effects.
 
-As you see in the starter code, I've created the ImageProcessor class for you already. Hook it up the the
-main controller by replacing the setupWithImage: function with the following code:
+As you see in the starter code, I've created the ImageProcessor class for you already. Hook it up the the main controller by replacing the setupWithImage: function with the following code:
 
 - (void)setupWithImage:(UIImage*)image {
   UIImage * fixedImage = [image imageWithFixedOrientation];
@@ -239,15 +183,11 @@ and also comment out the following line of code in ViewDidLoad:
 
  // [self setupWithImage:[UIImage imageNamed:@"ghost_tiny.png"]];
  
- Now take a look at ImageProcessor. As you can see, ImageProcessor is a singleton object that calls
- processUsingPixels: on an input image and returns the output using a delegate.
+ Now take a look at ImageProcessor. As you can see, ImageProcessor is a singleton object that calls processUsingPixels: on an input image and returns the output using a delegate.
  
- processUsingPixels: currently is a copy of the code we looked at previously that gives us access to the
- pixels of inputImage. Notice the two extra macros A(x) and RGBAMake(r,g,b,a) defined to provide
- extra convenience.
+ processUsingPixels: currently is a copy of the code we looked at previously that gives us access to the pixels of inputImage. Notice the two extra macros A(x) and RGBAMake(r,g,b,a) defined to provide extra convenience.
  
- Now build and run. Choose an image from your album (or take a photo) and you should see it appear in your view
- like this:
+ Now build and run. Choose an image from your album (or take a photo) and you should see it appear in your view like this:
  [BuildnRun-1]
  
  So far so good :]
@@ -265,8 +205,7 @@ and also comment out the following line of code in ViewDidLoad:
   CGSize ghostSize = CGSizeMake(targetGhostWidth, targetGhostWidth / ghostImageAspectRatio);
   CGPoint ghostOrigin = CGPointMake(inputWidth * 0.5, inputHeight * 0.2);
   
-Ghosty will be taking up 25% of the input's width, and his origin (top-left corner) will be
-located at ghostOrigin.
+Ghosty will be taking up 25% of the input's width, and his origin (top-left corner) will be located at ghostOrigin.
 
 The next step is to get the pixel buffer of Ghosty, this time with scaling:
 
@@ -281,24 +220,17 @@ The next step is to get the pixel buffer of Ghosty, this time with scaling:
   
 Now the pixels are ready to be used. But first, you need to learn more about the alpha channel and blending.
 
-As mentioned before, each color has an Alpha value that indicates its "transparency". This makes sense intuitively,
-but when you are manipulating an image, each pixel has exactly one color, so how do you assign a pixel if it has a
-background color and a "semi-transparent" color over it?
+As mentioned before, each color has an Alpha value that indicates its "transparency". This makes sense intuitively, but when you are manipulating an image, each pixel has exactly one color, so how do you assign a pixel if it has a background color and a "semi-transparent" color over it?
 
-The answer is alpha blending. The color on top is "blended" into the color behind it using its alpha value with a
-simple formula, with alpha being a decimal from 0-1:
+The answer is alpha blending. The color on top is "blended" into the color behind it using its alpha value with a simple formula, with alpha being a decimal from 0-1:
 
 New Color = TopColor * TopColor's Alpha + BottomColor * (1 - TopColor's Alpha)
 
-This is the standard linear interpolation equation. When the alpha is 1, NewColor is equal to TopColor and when
-alpha is 0, NewColor is equal to BottomColor. When alpha is between 0 and 1, NewColor is a blend of TopColor and
-BotomColor.
+This is the standard linear interpolation equation. When the alpha is 1, NewColor is equal to TopColor and when alpha is 0, NewColor is equal to BottomColor. When alpha is between 0 and 1, NewColor is a blend of TopColor and BotomColor.
 
 Okay, back to Ghosty. 
 
-As with most direct pixel image processing, you need some for-loops to go through all the pixels. However, you only
-need to loop through the pixels that you want to change. Here's what your loop will look like, along with how
-to access the correct pixel from both Ghosty and the input image
+As with most direct pixel image processing, you need some for-loops to go through all the pixels. However, you only need to loop through the pixels that you want to change. Here's what your loop will look like, along with how to access the correct pixel from both Ghosty and the input image
 
  NSUInteger offsetPixelCountForInput = ghostOrigin.y * inputWidth + ghostOrigin.x;
   for (NSUInteger j = 0; j < ghostSize.height; j++) {
@@ -313,9 +245,7 @@ to access the correct pixel from both Ghosty and the input image
     }
   }
 
-Notice how we only loop through the number of pixels that Ghosty has, and offset the input image
-by offsetPixelCountForInput. This image below explains how this calculation is done, remember that
-although we are thinking about the images as 2-D arrays, they are actually 1-D arrays in memory.
+Notice how we only loop through the number of pixels that Ghosty has, and offset the input image by offsetPixelCountForInput. This image below explains how this calculation is done, remember that although we are thinking about the images as 2-D arrays, they are actually 1-D arrays in memory.
 [Image of 1-D array accessing]
 
 Next, fill in this code after the comment Do some processing here to do the actual blending:
@@ -335,15 +265,11 @@ Next, fill in this code after the comment Do some processing here to do the actu
 
 There are two points to note in this code.
 
-1. You apply 50% alpha to Ghosty simply by multiplying the alpha of each pixel by 0.5. You then
-blend with the alpha blending formula previously discussed.
+1. You apply 50% alpha to Ghosty simply by multiplying the alpha of each pixel by 0.5. You then blend with the alpha blending formula previously discussed.
 
-2. The clamping of each color to [0,255] is not required here, since the value will never go out of 
-these bounds. However, most algorithms will require this clamping to prevent your colors from overflowing
-and giving you unexpected outputs. 
+2. The clamping of each color to [0,255] is not required here, since the value will never go out of  these bounds. However, most algorithms will require this clamping to prevent your colors from overflowing and giving you unexpected outputs. 
 
-To test this code, you need to create a new UIImage out of the context and return it. We are going
-to ignore the memory leak for now.
+To test this code, you need to create a new UIImage out of the context and return it. We are going to ignore the memory leak for now.
 
   Create a new UIImage
   CGImageRef newCGImage = CGBitmapContextCreateImage(context);
@@ -356,10 +282,9 @@ Build and run! You should see Ghosty floating semi-transparently in your image l
 
 Good work so far, this is going viral!
 
-Now to implement a black and white filter, try implementing this yourself. Set each pixel's
-red, green, and blue components to the average of the three in the original.
+Now try implementing the black and white filter yourself. To do this, set each pixel's red, green, and blue components to the average of the three in the original, just like how we printed out Ghosty's brightness in the beginning.
 
-Done already? Build and run to see if you got it right. Here is code to check against as well:
+Done already? Build and run to see if you got it right. Here is code to check against:
 
   // Convert the image to Black & White
   for (NSUInteger j = 0; j < inputHeight; j++) {
@@ -374,8 +299,7 @@ Done already? Build and run to see if you got it right. Here is code to check ag
     }
   }
   
-The very last step is to cleanup the allocated objects. Sadly ARC cannot manage CGImageRefs
-and CGContexts for you. Add this to the end of the function before the return statement
+The very last step is to cleanup the allocated objects. Sadly ARC cannot manage CGImageRefs and CGContexts for you. Add this to the end of the function before the return statement
 
   // Cleanup!
   CGColorSpaceRelease(colorSpace);
@@ -387,18 +311,32 @@ and CGContexts for you. Add this to the end of the function before the return st
 Build and run. Be prepared to be spooked by the result:
 [BuildnRun-3]
 
-Congratulations! You have finished your first image processing application. You can download a 
-working version of this project here:
+Congratulations! You have finished your first image processing application. You can download a  working version of this project here:
 
 That wasn't too bad was it? You can play around with the code inside the for-loops to create 
 your own filters, try to see if you can implement these effects:
 	1. Swap the red & blue channels of the image
 	2. Increase the brightness of the image by 10%
 As a further challenge, try scaling Ghosty using only pixel based methods. Here are the steps:
-    1. Create a new CGContext with the target size for Ghosty
-    2. For each pixel in this new Context, calculate where you should get it from in the original
-       Ghosty image.
-    3. For extra coolness, try interpolating between nearby pixels if your calculations land in-between
-       pixels. If you interpolate between the four nearest pixels, this is called "Bilinear scaling"
+    1. Create a new CGContext with the target size for Ghosty.
+    2. For each pixel in this new Context, calculate which pixel you should copy from in the original image.
+    3. For extra coolness, try interpolating between nearby pixels if your calculation for the original coordinate lands in-between pixels. If you interpolate between the four nearest pixels, you have just implemented "Bilinear scaling" all on your own! What a boss!
        
 Image processing using Core Graphics
+
+If you've completed the first project, you should have a pretty good grasp of the basic concepts of image processing. Now you can set out and find simpler and faster ways to accomplish the same effects.
+
+Core Graphics is Apple's API for drawing based on the Quartz engine. It provides a low-level API that may look slightly familiar if you are familiar with OpenGL. Many of you may be familiar interacting with  Core Graphics if you've ever overridden the DrawRect: method for a view. Core Graphics provides several functions to draw objects, gradients, and other cool stuff to your view. There are tons of tutorials on this site about these as well.
+
+Today, you are going to learn how to use Core Graphics to do some basic image processing. Core Graphics is easy to use, but does not offer the best performance as it is still mostly CPU-based.
+
+Here I am going to introduce the concept of a "Graphics Context" to you. Graphics Contexts are used in most types of rendering, and is a core concept to OpenGl and Core Graphics. You can think about it as simply a global "state" object that holds all the information needed to draw. In terms of Core Graphics, this includes the current fill color, stroke color, transforms, masks, where to draw, etc.
+
+Inside the DrawRect: function, a context is already setup and prepared for your drawing. This is why you can directly call UIGraphicsGetCurrentContext() and draw to it. Basically the system has set this up so that you are drawing to the view that is being rendered. 
+
+Outside of the DrawRect: function, there is no Graphics Context available, and you can create one like we did in the first project using CGContextCreate() or you can use UIGraphicsBeginImageContext() and grab the created context using UIGraphicsGetCurrentContext(). Outside of the DrawRect: function, 
+
+In the following three tutorials, you will be replacing the processUsingPixels: function with three different functions that will perform the same task using different libraries. So let's get started!
+
+
+
