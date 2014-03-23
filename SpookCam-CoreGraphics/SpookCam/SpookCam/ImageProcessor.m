@@ -42,7 +42,7 @@
   NSInteger inputWidth = CGRectGetWidth(imageRect);
   NSInteger inputHeight = CGRectGetHeight(imageRect);
   
-  // 1. Blend the ghost onto our image first
+  // 1. Blend the ghost onto our image
   UIImage * ghostImage = [UIImage imageNamed:@"ghost.png"];
   CGFloat ghostImageAspectRatio = ghostImage.size.width / ghostImage.size.height;
   
@@ -71,7 +71,7 @@
   
   UIImage * imageWithGhost = UIGraphicsGetImageFromCurrentImageContext();
   UIGraphicsEndImageContext();
-  
+    
   // 2. Convert our image to Black and White
   
   // 2.1 Create a new context with a gray color space

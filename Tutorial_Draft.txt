@@ -159,7 +159,7 @@ to four different methods of producing the same effect. The methods are:
 The effect you will be implementing consists of two steps: 
 
 1. Blend ghosty onto your image with 50% alpha
-2. Make the resulting image Black and White
+2. Convert the resulting image to Black and White
 
 
 [Ghosty - I'm scared]
@@ -322,21 +322,95 @@ As a further challenge, try scaling Ghosty using only pixel based methods. Here 
     2. For each pixel in this new Context, calculate which pixel you should copy from in the original image.
     3. For extra coolness, try interpolating between nearby pixels if your calculation for the original coordinate lands in-between pixels. If you interpolate between the four nearest pixels, you have just implemented "Bilinear scaling" all on your own! What a boss!
        
-Image processing using Core Graphics
-
+      
 If you've completed the first project, you should have a pretty good grasp of the basic concepts of image processing. Now you can set out and find simpler and faster ways to accomplish the same effects.
+ 
+In the following three tutorials, you will be replacing the processUsingPixels: function with three different functions that will perform the same task using different libraries. So let's get started!
+
+Image processing using Core Graphics
 
 Core Graphics is Apple's API for drawing based on the Quartz engine. It provides a low-level API that may look slightly familiar if you are familiar with OpenGL. Many of you may be familiar interacting with  Core Graphics if you've ever overridden the DrawRect: method for a view. Core Graphics provides several functions to draw objects, gradients, and other cool stuff to your view. There are tons of tutorials on this site about these as well.
 
 Today, you are going to learn how to use Core Graphics to do some basic image processing. Core Graphics is easy to use, but does not offer the best performance as it is still mostly CPU-based.
 
-Here I am going to introduce the concept of a "Graphics Context" to you. Graphics Contexts are used in most types of rendering, and is a core concept to OpenGl and Core Graphics. You can think about it as simply a global "state" object that holds all the information needed to draw. In terms of Core Graphics, this includes the current fill color, stroke color, transforms, masks, where to draw, etc.
+Here I am going to introduce the concept of a "Graphics Context" to you. Graphics Contexts are used in most types of rendering, and is a core concept to OpenGl and Core Graphics. You can think about it as simply a global "state" object that holds all the information needed to draw. In terms of Core Graphics, this includes the current fill color, stroke color, transforms, masks, where to draw, etc. In iOS, there are other different types of contexts, such as PDF contexts, which allow you to draw to a PDF file. Here you are only going to use a Bitmap context, which draws to a bitmap!
 
 Inside the DrawRect: function, a context is already setup and prepared for your drawing. This is why you can directly call UIGraphicsGetCurrentContext() and draw to it. Basically the system has set this up so that you are drawing to the view that is being rendered. 
 
-Outside of the DrawRect: function, there is no Graphics Context available, and you can create one like we did in the first project using CGContextCreate() or you can use UIGraphicsBeginImageContext() and grab the created context using UIGraphicsGetCurrentContext(). Outside of the DrawRect: function, 
+Outside of the DrawRect: function, there is no Graphics Context available, and you can create one like we did in the first project using CGContextCreate() or you can use UIGraphicsBeginImageContext() and grab the created context using UIGraphicsGetCurrentContext(). This is called "Offscreen rendering", as the graphics you are drawing are not directly shown anywhere, but are instead rendered to an off-screen buffer. In Core Graphics you can then get an UIImage of the context and show it on screen. If using OpenGL, you can directly swap this buffer with the one currently rendered to screen to display it directly.
 
-In the following three tutorials, you will be replacing the processUsingPixels: function with three different functions that will perform the same task using different libraries. So let's get started!
+Image Processing using Core Graphics takes advantage of this off-screen rendering to render your image in a buffer, apply any effects you want, and grab the image from the context. 
 
+Here is the function you can replace processUsingPixels: with -
+- (UIImage *)processUsingCoreGraphics:(UIImage*)input {
+  CGRect imageRect = {CGPointZero,input.size};
+  NSInteger inputWidth = CGRectGetWidth(imageRect);
+  NSInteger inputHeight = CGRectGetHeight(imageRect);
+  
+  // 1. Get our ghost image
+  UIImage * ghostImage = [UIImage imageNamed:@"ghost.png"];
+  CGFloat ghostImageAspectRatio = ghostImage.size.width / ghostImage.size.height;
+  
+  NSInteger targetGhostWidth = inputWidth * 0.25;
+  CGSize ghostSize = CGSizeMake(targetGhostWidth, targetGhostWidth / ghostImageAspectRatio);
+  CGPoint ghostOrigin = CGPointMake(inputWidth * 0.5, inputHeight * 0.2);
+  
+  CGRect ghostRect = {ghostOrigin, ghostSize};
+  
+  // 2. Create our context
+  UIGraphicsBeginImageContext(input.size);
+  CGContextRef context = UIGraphicsGetCurrentContext();
 
+  // flip drawing context
+  CGAffineTransform flip = CGAffineTransformMakeScale(1.0, -1.0);
+  CGAffineTransform flipThenShift = CGAffineTransformTranslate(flip,0,-inputHeight);
+  CGContextConcatCTM(context, flipThenShift);
+  
+  // 3. Draw our image into the new context
+  CGContextDrawImage(context, imageRect, [input CGImage]);
+  
+  // 4. Set Alpha to 0.5 and draw our ghost on
+  CGContextSetBlendMode(context, kCGBlendModeSourceAtop);
+  CGContextSetAlpha(context,0.5);
+  CGRect transformedGhostRect = CGRectApplyAffineTransform(ghostRect, flipThenShift);
+  CGContextDrawImage(context, transformedGhostRect, [ghostImage CGImage]);
+  
+  // 5. Retrieve our image
+  UIImage * imageWithGhost = UIGraphicsGetImageFromCurrentImageContext();
+  UIGraphicsEndImageContext();
+    
+  // 6. Create a new context with a gray color space
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+  context = CGBitmapContextCreate(nil, inputWidth, inputHeight,
+                           8, 0, colorSpace, (CGBitmapInfo)kCGImageAlphaNone);
+  
+  // 7. Draw our image into the new context
+  CGContextDrawImage(context, imageRect, [imageWithGhost CGImage]);
+  
+  // 8. Get our new B&W Image
+  CGImageRef imageRef = CGBitmapContextCreateImage(context);
+  UIImage * finalImage = [UIImage imageWithCGImage:imageRef];
+  
+  // Cleanup
+  CGColorSpaceRelease(colorSpace);
+  CGContextRelease(context);
+  CFRelease(imageRef);
+  
+  return finalImage;
+}
 
+That's quite a bit of stuff. Let's go over it section by section:
+
+1. Calculate the location of Ghosty just like before
+
+2. Create a new CGContext. As discussed before, this creates an "off-screen" context for us. Recall how the coordinate system for CGContext uses the bottom-left corner as the origin, as opposed to UIImage, which uses the top-left. Interestingly, if you use UIGraphicsBeginImageContext() to create a context, the system will flip the coordinates for you in this context, resulting in the origin being at the top-left. Thus, you will need to apply a transformation to our CGContext to flip it back so our CGImage will draw properly. Note that if you draw a UIImage directly to this context, you will not need to perform this transformation. Setting the transform to the context will apply this transform to all the drawing you do afterwards. 
+
+3. Draw our image into the context.
+
+4. After the image is drawn, you set the alpha of our context to 0.5. This will only affect future draws, so the input image is still drawn on with full alpha. You also need to set the blend mode to kCGBlendModeSourceAtop. This sets up the context so it uses the same alpha blending formula you used before to blend on any future drawings. After setting up these parameters, draw Ghosty into his rect, flipping it first.
+
+5. Retrieve your processed image from the current context and end the graphics context, which destroys the buffer.
+
+6. To convert our image to Black and White, we are going to create a new CGContext that uses a Gray colorspace. This will convert anything we draw into this context to grayscale. Note that since we are using CGBitmapContextCreate() to create this context, the coordinate system has the origin in the bottom-left corner, and we do not need to flip it to draw our CGImage.
+
+7.
