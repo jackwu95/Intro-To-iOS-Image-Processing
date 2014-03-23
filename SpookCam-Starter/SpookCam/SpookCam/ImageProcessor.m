@@ -28,7 +28,7 @@
 #pragma mark - Public
 
 - (void)processImage:(UIImage*)inputImage {
-  UIImage * outputImage = inputImage;
+  UIImage * outputImage = [self processUsingPixels:inputImage];
   
   if ([self.delegate respondsToSelector:
        @selector(imageProcessorFinishedProcessingWithImage:)]) {
