@@ -45,7 +45,6 @@
   // 1. Create our GPUImagePictures
   GPUImagePicture * inputGPUImage = [[GPUImagePicture alloc] initWithImage:input];
   
-  // Cheat again to get padded ghost image using Core Graphics
   UIImage * ghostImage = [self createPaddedGhostImageWithSize:input.size];
   GPUImagePicture * ghostGPUImage = [[GPUImagePicture alloc] initWithImage:ghostImage];
 
