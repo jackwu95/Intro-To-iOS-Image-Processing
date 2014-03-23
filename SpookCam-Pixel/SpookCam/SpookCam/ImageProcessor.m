@@ -99,13 +99,13 @@
       UInt32 * ghostPixel = ghostPixels + j * (int)ghostSize.width + i;
       UInt32 ghostColor = *ghostPixel;
       
-      // Blend the ghost with 40% alpha
-      CGFloat ghostAlpha = 0.4f * (A(ghostColor) / 255.0);
+      // Blend the ghost with 50% alpha
+      CGFloat ghostAlpha = 0.5f * (A(ghostColor) / 255.0);
       UInt32 newR = R(inputColor) * (1 - ghostAlpha) + R(ghostColor) * ghostAlpha;
       UInt32 newG = G(inputColor) * (1 - ghostAlpha) + G(ghostColor) * ghostAlpha;
       UInt32 newB = B(inputColor) * (1 - ghostAlpha) + B(ghostColor) * ghostAlpha;
       
-      //Clamp
+      //Clamp, not really useful here :p
       newR = MAX(0,MIN(255, newR));
       newG = MAX(0,MIN(255, newG));
       newB = MAX(0,MIN(255, newB));

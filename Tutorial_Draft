@@ -15,7 +15,8 @@ First step - What's an image? [Ghosty!]
 
 Ghosty here is not a real ghost, he is an image. So what exactly is an image?
 An image is simply a collection of pixels, each assigned one specific color, arranged
-like a 2-dimensional array.
+like a 2-dimensional array. 
+
 Here is Ghosty zoomed in - each square you see is a pixel, notice how each pixel has one
 single color.
 
@@ -33,6 +34,18 @@ The alpha component is quite different from the others. You can think of it as "
 like the alpha property of UIViews. The alpha component of a color doesn't really mean anything unless
 there is a color behind it, at which time it tells the graphics processor how "transparent" it is and how
 much of the color behind to show. We will discuss this in greater depth later on when we talk about blending.
+
+NOTE: This is why you hear the term "Bitmap". A bitmap is a 2D map of pixels, each one comprised of bits!
+
+Coordinate system
+
+Since an image is a 2D map of pixels, the origin will need to be specified. Usually the origin is either
+the top-left corner of the image, with the y-axis pointing downwards, or at the bottom left, with the
+y-axis pointing upwards.
+
+There is no correct coordinate system, and even Apple seems to be struggling to determine which one to use.
+Currently, Core Graphics uses the top-left corner as the origin and Core Image uses the bottom-left. This is
+important to remember so you don't get confused when Core Image returns you an "upside down" image.
 
 Color spaces
 
@@ -88,6 +101,8 @@ background color to red and run the App again.
 Now take a quick look at the code. This starter kit uses UIImagePicker to allow you to pick images from the album
 or take pictures using the camera. After an image is selected, setupWithImage: is called, which in this case,
 outputs the brightness of each pixel to the log.
+
+NOTE - Before we get started, notice how we call
 
 Let's look at how its done - 
 The first step is to convert our UIImage into an array of pixels that we can access directly. Here is the
@@ -187,15 +202,203 @@ Time to process some images.
 [Ghosty -> Processor -> Processed Cheese]
 
 There are several different ways you can do image processing on iOS. Today I am going to introduce you
-to four different methods of producing the same effect. The methods are 1. Direct pixel manipulation
-2. Core Graphics Library 3. Core Image Library 4. 3rd-party GPUImage library. The effect you will
-be implementing consists of two steps: 
+to four different methods of producing the same effect. The methods are: 
+1. Direct bitmap manipulation
+2. Core Graphics Library 
+3. Core Image Library 
+4. 3rd-party GPUImage library. 
+
+The effect you will be implementing consists of two steps: 
 
 1. Blend ghosty onto your image with 50% alpha
 2. Make the resulting image Black and White
 
-Let's get started!
+
 [Ghosty - I'm scared]
 
+First method - Direct bitmap manipulation
 
+Of the four methods, I will go into the most detail in this one because it is the most fundamental way of
+image processing that will allow you to understand what all the other libraries are doing. In this method,
+we will loop through each pixel, as we did in the starter kit, and assign new colors to them one by one. 
+As you can imagine, this method does not scale well to larger images and more complicated effects.
 
+As you see in the starter code, I've created the ImageProcessor class for you already. Hook it up the the
+main controller by replacing the setupWithImage: function with the following code:
+
+- (void)setupWithImage:(UIImage*)image {
+  UIImage * fixedImage = [image imageWithFixedOrientation];
+  self.workingImage = fixedImage;
+  
+  // Commence with processing!
+  [ImageProcessor sharedProcessor].delegate = self;
+  [[ImageProcessor sharedProcessor] processImage:fixedImage];
+}
+
+and also comment out the following line of code in ViewDidLoad:
+
+ // [self setupWithImage:[UIImage imageNamed:@"ghost_tiny.png"]];
+ 
+ Now take a look at ImageProcessor. As you can see, ImageProcessor is a singleton object that calls
+ processUsingPixels: on an input image and returns the output using a delegate.
+ 
+ processUsingPixels: currently is a copy of the code we looked at previously that gives us access to the
+ pixels of inputImage. Notice the two extra macros A(x) and RGBAMake(r,g,b,a) defined to provide
+ extra convenience.
+ 
+ Now build and run. Choose an image from your album (or take a photo) and you should see it appear in your view
+ like this:
+ [BuildnRun-1]
+ 
+ So far so good :]
+ 
+ The image looks way too relaxing, so time to bring in ghosty!
+ 
+ First, get an CGImageRef object of ghosty with the following code:
+	  UIImage * ghostImage = [UIImage imageNamed:@"ghost"];
+	  CGImageRef ghostCGImage = [ghostImage CGImage];
+ 
+ Now do some math to figure out the rect where we want to put ghosty inside the input image. [OMG MATH]
+ 
+  CGFloat ghostImageAspectRatio = ghostImage.size.width / ghostImage.size.height;
+  NSInteger targetGhostWidth = inputWidth * 0.25;
+  CGSize ghostSize = CGSizeMake(targetGhostWidth, targetGhostWidth / ghostImageAspectRatio);
+  CGPoint ghostOrigin = CGPointMake(inputWidth * 0.5, inputHeight * 0.2);
+  
+Ghosty will be taking up 25% of the input's width, and his origin (top-left corner) will be
+located at ghostOrigin.
+
+The next step is to get the pixel buffer of Ghosty, this time with scaling:
+
+	NSUInteger ghostBytesPerRow = bytesPerPixel * ghostSize.width;
+	UInt32 * ghostPixels = (UInt32 *)calloc(ghostSize.width * ghostSize.height, sizeof(UInt32));
+  
+	CGContextRef ghostContext = CGBitmapContextCreate(ghostPixels, ghostSize.width, ghostSize.height,
+                                                    bitsPerComponent, ghostBytesPerRow, colorSpace,
+                                                    kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+  
+	CGContextDrawImage(ghostContext, CGRectMake(0, 0, ghostSize.width, ghostSize.height),ghostCGImage);
+  
+Now the pixels are ready to be used. But first, you need to learn more about the alpha channel and blending.
+
+As mentioned before, each color has an Alpha value that indicates its "transparency". This makes sense intuitively,
+but when you are manipulating an image, each pixel has exactly one color, so how do you assign a pixel if it has a
+background color and a "semi-transparent" color over it?
+
+The answer is alpha blending. The color on top is "blended" into the color behind it using its alpha value with a
+simple formula, with alpha being a decimal from 0-1:
+
+New Color = TopColor * TopColor's Alpha + BottomColor * (1 - TopColor's Alpha)
+
+This is the standard linear interpolation equation. When the alpha is 1, NewColor is equal to TopColor and when
+alpha is 0, NewColor is equal to BottomColor. When alpha is between 0 and 1, NewColor is a blend of TopColor and
+BotomColor.
+
+Okay, back to Ghosty. 
+
+As with most direct pixel image processing, you need some for-loops to go through all the pixels. However, you only
+need to loop through the pixels that you want to change. Here's what your loop will look like, along with how
+to access the correct pixel from both Ghosty and the input image
+
+ NSUInteger offsetPixelCountForInput = ghostOrigin.y * inputWidth + ghostOrigin.x;
+  for (NSUInteger j = 0; j < ghostSize.height; j++) {
+    for (NSUInteger i = 0; i < ghostSize.width; i++) {
+      UInt32 * inputPixel = inputPixels + j * inputWidth + i + offsetPixelCountForInput;
+      UInt32 inputColor = *inputPixel;
+      
+      UInt32 * ghostPixel = ghostPixels + j * (int)ghostSize.width + i;
+      UInt32 ghostColor = *ghostPixel;
+      
+	  // Do some processing here      
+    }
+  }
+
+Notice how we only loop through the number of pixels that Ghosty has, and offset the input image
+by offsetPixelCountForInput. This image below explains how this calculation is done, remember that
+although we are thinking about the images as 2-D arrays, they are actually 1-D arrays in memory.
+[Image of 1-D array accessing]
+
+Next, fill in this code after the comment Do some processing here to do the actual blending:
+
+    // Blend the ghost with 50% alpha
+	CGFloat ghostAlpha = 0.5f * (A(ghostColor) / 255.0);
+    UInt32 newR = R(inputColor) * (1 - ghostAlpha) + R(ghostColor) * ghostAlpha;
+    UInt32 newG = G(inputColor) * (1 - ghostAlpha) + G(ghostColor) * ghostAlpha;
+    UInt32 newB = B(inputColor) * (1 - ghostAlpha) + B(ghostColor) * ghostAlpha;
+      
+    //Clamp, not really useful here :p
+    newR = MAX(0,MIN(255, newR));
+    newG = MAX(0,MIN(255, newG));
+    newB = MAX(0,MIN(255, newB));
+      
+    *inputPixel = RGBAMake(newR, newG, newB, A(inputColor));
+
+There are two points to note in this code.
+
+1. You apply 50% alpha to Ghosty simply by multiplying the alpha of each pixel by 0.5. You then
+blend with the alpha blending formula previously discussed.
+
+2. The clamping of each color to [0,255] is not required here, since the value will never go out of 
+these bounds. However, most algorithms will require this clamping to prevent your colors from overflowing
+and giving you unexpected outputs. 
+
+To test this code, you need to create a new UIImage out of the context and return it. We are going
+to ignore the memory leak for now.
+
+  Create a new UIImage
+  CGImageRef newCGImage = CGBitmapContextCreateImage(context);
+  UIImage * processedImage = [UIImage imageWithCGImage:newCGImage];
+  
+  return processedImage;
+
+Build and run! You should see Ghosty floating semi-transparently in your image like this:
+[BuildnRun-2]
+
+Good work so far, this is going viral!
+
+Now to implement a black and white filter, try implementing this yourself. Set each pixel's
+red, green, and blue components to the average of the three in the original.
+
+Done already? Build and run to see if you got it right. Here is code to check against as well:
+
+  // Convert the image to Black & White
+  for (NSUInteger j = 0; j < inputHeight; j++) {
+    for (NSUInteger i = 0; i < inputWidth; i++) {
+      UInt32 * currentPixel = inputPixels + (j * inputWidth) + i;
+      UInt32 color = *currentPixel;
+      
+      // Average of RGB = greyscale
+      UInt32 averageColor = (R(color) + G(color) + B(color)) / 3.0;
+      
+      *currentPixel = RGBAMake(averageColor, averageColor, averageColor, A(color));
+    }
+  }
+  
+The very last step is to cleanup the allocated objects. Sadly ARC cannot manage CGImageRefs
+and CGContexts for you. Add this to the end of the function before the return statement
+
+  // Cleanup!
+  CGColorSpaceRelease(colorSpace);
+  CGContextRelease(context);
+  CGContextRelease(ghostContext);
+  free(inputPixels);
+  free(ghostPixels);
+  
+Build and run. Be prepared to be spooked by the result:
+[BuildnRun-3]
+
+Congratulations! You have finished your first image processing application. You can download a 
+working version of this project here:
+
+That wasn't too bad was it? You can play around with the code inside the for-loops to create 
+your own filters, try to see if you can implement these effects:
+	1. Swap the red & blue channels of the image
+	2. Increase the brightness of the image by 10%
+As a further challenge, try scaling Ghosty using only pixel based methods. Here are the steps:
+    1. Create a new CGContext with the target size for Ghosty
+    2. For each pixel in this new Context, calculate where you should get it from in the original
+       Ghosty image.
+    3. For extra coolness, try interpolating between nearby pixels if your calculations land in-between
+       pixels. If you interpolate between the four nearest pixels, this is called "Bilinear scaling"
+       
+Image processing using Core Graphics

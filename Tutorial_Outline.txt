@@ -23,3 +23,7 @@ Method 3: Using CoreImage framework (latest and greatest)  [discussion/code snip
 Method 4: GPUImage [discussion/code snippets/downloadable demo]
 
 3) Where to go from here?
+
+Stock photo from:
+http://freerangestock.com/details.php?gid=&sgid=&pid=2465
+"Photos courtesy of and copyright Free Range Stock, www.freerangestock.com"
