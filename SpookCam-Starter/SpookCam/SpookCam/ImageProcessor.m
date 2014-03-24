@@ -67,7 +67,7 @@
                                                kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
   
   CGContextDrawImage(context, CGRectMake(0, 0, inputWidth, inputHeight), inputCGImage);
-  
+    
  
   return inputImage;
 }
